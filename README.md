@@ -15,3 +15,12 @@
 
 * Black.jpg, White.jpg, GreenFrame.jpg  
 駒と盤面の画像
+
+* 参考にするサンプルプログラム
+```
+SimpleClient.java
+ServerSample2.java
+OthelloSample1.java
+PlayerSample1.java
+Black.jpg, White.jpg, GreenFrame.jpg
+```
