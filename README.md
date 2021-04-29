@@ -2,16 +2,16 @@
 
 ## samplecodeの説明
 * ClientSample*.java, SimpleClient.java  
-　クライアントプログラムのサンプルプログラム
+クライアントプログラムのサンプルプログラム
 
 * EchorServer.java, ServerSample*.java  
-　サーバプログラムのサンプルプログラム
+サーバプログラムのサンプルプログラム
 
 * OthelloSample1.java  
-　オセロプログラムのサンプルプログラム
+オセロプログラムのサンプルプログラム
 
 * PlayerSample1.java  
-　プレイヤプログラムのサンプルプログラム
+プレイヤプログラムのサンプルプログラム
 
 * Black.jpg, White.jpg, GreenFrame.jpg  
-　駒と盤面の画像
+駒と盤面の画像
