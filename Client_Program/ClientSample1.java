@@ -11,16 +11,15 @@ public class ClientSample1 extends JFrame implements MouseListener {
 	private JLabel numLabel1;
 	private JLabel numLabel2;
 	private JLabel numLabelW;
-	//private JLabel numLabelB;
+	private JLabel numLabelB;
 	private JLabel nameLabel11;
 	private JLabel nameLabel22;
 	private JLabel nameLabel1;
 	private JLabel nameLabel2;
 	private Container c;
 	private ImageIcon blackIcon, whiteIcon, boardIcon;
-
-	public ClientSample1() {
-		//テスト用に局面情報を初期化
+	
+	//テスト用に局面情報を初期化
 		String [][] grids = 
 			{{"board","board","board","board","board","board","board","board"},
 			 {"board","board","board","board","board","board","board","board"},
@@ -30,6 +29,8 @@ public class ClientSample1 extends JFrame implements MouseListener {
 			 {"board","board","board","board","board","board","board","board"},
 			 {"board","board","board","board","board","board","board","board"},
 			 {"board","board","board","board","board","board","board","board"}};
+
+	public ClientSample1() {
 		
 		int row = 8; //オセロ盤の縦横マスの数
 		
@@ -89,38 +90,21 @@ public class ClientSample1 extends JFrame implements MouseListener {
 		c.add(colorLabel);
 		*/
 		
-		//駒数表示用ラベル
-		
-		/*
-		public int getNW() {
-			int nw=0;
-			for(int i=0;i<row;i++) {
-				for(int j=0;j<row;j++) {
-					if(grids[i][j].equals("white")){ nw++;}
-					if(grids[i][j].equals("black")){ nb++;}
-				}
-			}
-			return int nw;
-		}
-		for(int i=0;i<row;i++) {
-			for(int j=0;j<row;j++) {
-				if(grids[i][j].equals("white")){ nw++;}
-				if(grids[i][j].equals("black")){ nb++;}
-			}
-		}
-		*/
-		
 		numLabel1 = new JLabel(whiteIcon);
 		numLabel1.setBounds(4*45, 8*45+10, 45, 45);
 		c.add(numLabel1);		
-		numLabelW = new JLabel("Integer.toString(nw)");
-		numLabelW.setBounds(20+40, 10*45, 80, 40); //境界を設定
+		numLabelW = new JLabel(Integer.toString(getNW()));
+		numLabelW.setBounds(5*45+5, 8*45+10, 45, 45); //境界を設定
 		numLabelW.setFont(new Font("Arial",Font.PLAIN,24));
-		numLabelW.setBorder(new LineBorder(Color.BLACK, 2, false));
+		c.add(numLabelW);
 		
 		numLabel2 = new JLabel(blackIcon);
 		numLabel2.setBounds(6*45, 8*45+10, 45, 45);
 		c.add(numLabel2);
+		numLabelB = new JLabel(Integer.toString(getNB()));
+		numLabelB.setBounds(7*45+5, 8*45+10, 45, 45); //境界を設定
+		numLabelB.setFont(new Font("Arial",Font.PLAIN,24));
+		c.add(numLabelB);
 		
 		//名前表示用ラベル
 		nameLabel11 = new JLabel(whiteIcon);
@@ -142,6 +126,27 @@ public class ClientSample1 extends JFrame implements MouseListener {
 		c.add(nameLabel22);
 	}
 
+	//駒数表示用ラベル
+	public int getNW() {
+		int nw=0;
+		for(int i=0;i<8;i++) {
+			for(int j=0;j<8;j++) {
+				if(grids[i][j].equals("white")){ nw++;}
+			}
+		}
+		return nw;
+	}
+			
+	public int getNB() {
+		int nb = 0;
+		for(int i=0;i<8;i++) {
+			for(int j=0;j<8;j++) {
+				if(grids[i][j].equals("black")){ nb++;}
+			}
+		}
+		return nb;
+	}
+	
 	public void connectServer(String ipAddress, int port){
 	}
 	public void sendMessage(String msg){
