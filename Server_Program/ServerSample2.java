@@ -17,6 +17,10 @@ public class ServerSample2{
 	File file; //ログファイル操作用
 	FileWriter filewriter; //ログファイル操作用
 	Date date; //現在時刻取得用
+	private int n = 0;
+	private String ip1;
+	private String ip2;
+
 
 	//コンストラクタ
 	public ServerSample2(int port) { //待ち受けポートを引数とする
@@ -53,14 +57,50 @@ public class ServerSample2{
 				while(true) {// データを受信し続ける
 					String inputLine = br.readLine();//データを一行分読み込む
 					if (inputLine != null){ //データを受信したら
-						System.out.println("プレイヤー " + playerNo + " から " + inputLine + " が送信されました");
-						
-						if(inputLine.equals("対局終了")){
-							finishGame();
-						}
+						if(n == 0){
+							ip1 = inputLine; 
+							n++;
+							System.out.println("ip1: " + ip1);
 
-						forwardMessage(inputLine, playerNo); //もう一方に転送する
+						}else if(n == 1){
+							ip2 = inputLine;
+							n++;
+							System.out.println("ip2: " + ip2);
+
+						}else{
+							System.out.println("プレイヤー " + playerNo + " から " + inputLine + " が送信されました");
+						
+							if(inputLine.equals("対局終了")){
+								finishGame();
+							}
+						
+							forwardMessage(inputLine, playerNo); //もう一方に転送する
+		
+						}
+						if(i == 0){
+
+							date = new Date();
+							file = new File("log.txt");
+							filewriter = new FileWriter(file, true);
+							filewriter.write("プレイヤー 1, ipアドレス"+ ip1 + ", 時刻 " + date + "\r\n");
+							filewriter.close();
+		
+						}else if(i == 1){
+		
+							date = new Date();
+							file = new File("log.txt");
+							filewriter = new FileWriter(file, true);
+							filewriter.write("プレイヤー 2, ipアドレス" + ip2 + ", 時刻 " + date + "\r\n");
+							filewriter.write("対局開始\r\n");
+							filewriter.close();
+		
+		
+						}else{
+							System.out.println("対局開始前のログ操作がおかしいよ．"); //テスト用出力
+						}
+						i++;
 					}
+
 				}
 			} catch (IOException e){ // 接続が切れたとき
 				System.err.println("プレイヤ " + playerNo + "との接続が切れました．");
@@ -85,28 +125,7 @@ public class ServerSample2{
 				receiver[i].start();//データ送信オブジェクト(スレッド)を起動
 				sendColor(i);
 				
-				if(i == 0){
-
-					date = new Date();
-					file = new File("log.txt");
-					filewriter = new FileWriter(file, true);
-					filewriter.write("プレイヤー 1, ipアドレス 〇〇, 時刻 " + date + "\r\n");
-					filewriter.close();
-
-				}else if(i == 1){
-
-					date = new Date();
-					file = new File("log.txt");
-					filewriter = new FileWriter(file, true);
-					filewriter.write("プレイヤー 2, ipアドレス 〇〇, 時刻 " + date + "\r\n");
-					filewriter.write("対局開始\r\n");
-					filewriter.close();
-
-
-				}else{
-					System.out.println("対局開始前のログ操作がおかしいよ．"); //テスト用出力
-				}
-				i++;
+				
 			}
 		} catch (Exception e) {
 			System.err.println("ソケット作成時にエラーが発生しました: " + e);
@@ -117,10 +136,11 @@ public class ServerSample2{
 
 		if(!online[0]){
 			out[1].println("[プレイヤー1との接続が切れました]");//受信データをバッファに書き出す
-			out[1].flush();//受信データをそのまま返信する	
+			out[1].flush();//受信データをそのまま返信する
+
 		}else if(!online[1]){
 			out[0].println("[プレイヤー2との接続が切れました]");//受信データをバッファに書き出す
-			out[0].flush();//受信データをそのまま返信する	
+			out[0].flush();//受信データをそのまま返信する
 		}else{
 			System.out.println("接続確認がおかしいよ．"); //テスト用出力
 		}
@@ -130,10 +150,10 @@ public class ServerSample2{
 	public void sendColor(int playerNo){ //先手後手情報(白黒)の送信
 
 		if(playerNo == 0){
-			out[playerNo].println("[あなた：プレイヤー1、先行、黒の石を操作してください]");//受信データをバッファに書き出す
+			out[playerNo].println("black");//受信データをバッファに書き出す
 			out[playerNo].flush();//受信データをそのまま返信する	
 		}else if(playerNo == 1){
-			out[playerNo].println("[あなた：プレイヤー2、後攻、白の石を操作してください]");//受信データをバッファに書き出す
+			out[playerNo].println("white");//受信データをバッファに書き出す
 			out[playerNo].flush();//受信データをそのまま返信する	
 		}else{
 			System.out.println("人数がおかしいよ．"); //テスト用出力
@@ -142,10 +162,10 @@ public class ServerSample2{
 
 	public void forwardMessage(String msg, int playerNo){ //操作情報の転送
 		if(playerNo == 0){
-			out[1].println("[プレイヤー 1 から、" + msg + " が送信されました]");//受信データをバッファに書き出す
+			out[1].println(msg);//受信データをバッファに書き出す
 			out[1].flush();//受信データをそのまま返信する	
 		}else if(playerNo == 1){
-			out[0].println("[プレイヤー 2 から、" + msg + " が送信されました]");//受信データをバッファに書き出す
+			out[0].println(msg);//受信データをバッファに書き出す
 			out[0].flush();//受信データをそのまま返信する	
 		}else{
 			System.out.println("人数がおかしいよ．"); //テスト用出力
