@@ -24,6 +24,7 @@ public class Client extends JFrame implements MouseListener {
 	private Container c; // コンテナ
 	private ImageIcon blackIcon, whiteIcon, boardIcon, putIcon; //アイコン
 	private PrintWriter out;//データ送信用オブジェクト
+	private Receiver receiver; //データ受信用オブジェクト
 	private Othello game; // Othelloオブジェクト
 	private Player player; // Playerオブジェクト
 	private String [] grids;
@@ -122,6 +123,8 @@ public class Client extends JFrame implements MouseListener {
 		try {
 			socket = new Socket(ipAddress, port); //サーバ(ipAddress, port)に接続
 			out = new PrintWriter(socket.getOutputStream(), true); //データ送信用オブジェクトの用意
+			receiver = new Receiver(socket); //受信用オブジェクトの準備
+			receiver.start();//受信用オブジェクト(スレッド)起動
 		} catch (UnknownHostException e) {
 			System.err.println("ホストのIPアドレスが判定できません: " + e);
 			System.exit(-1);
