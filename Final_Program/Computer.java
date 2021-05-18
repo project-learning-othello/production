@@ -1,20 +1,23 @@
 
+import java.util.Random;
+
 public class Computer {
-	static int myColor,yourColor;		//自分,相手
+	private String mode;		//ハード、ノーマル、イージー
+	private int myColor,yourColor;		//自分,相手の色
 	private int [][] grids = new int[10][10];		//基本の盤面
 	int [][] grids_possible = new int[10][10];		//打てるマスを3とする盤面
 	int [][] grids_temp1 = new int[10][10];		//1手先の盤面
-	int [][] grids_temp1_possible = new int[10][10];		//！！！今の変更点！！！
+	int [][] grids_temp1_possible = new int[10][10];		//打てるマスを3とする盤面
 	int [][] grids_temp2 = new int[10][10];		//2手先の盤面
-	int [][] grids_temp2_possible = new int[10][10];		//2手先の盤面、打てるマスの視点が逆
+	int [][] grids_temp2_possible = new int[10][10];		//打てるマスを3とする盤面
 	int [][] grids_keep = new int[10][10];			//確定石を数えるために使う
 	int [] point1 = new int[64];		//1手先の評価値を保持する配列
 	int [] point2 = new int[64];		//2手先の評価値を保持する配列
 	int select1,select2;		//暫定的に1番優秀な手(1手先と2手先)
-	private String mode;		//～～～！！！～～～
 
 	//コンストラクタ
-	public Computer(String color, String mode) {		//～～～！！！～～～
+	public Computer(String color, String mode) {	//人(相手)側の色、難易度
+		this.mode = mode;
 		if(color == "white") {
 			myColor = 1;		//黒=1
 			yourColor = 2;
@@ -35,8 +38,6 @@ public class Computer {
 			 {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
 
 		copy_grids(grids_possible,grids);
-
-		this.mode = mode;		//～～～！！！～～～
 	}
 
 
@@ -270,7 +271,23 @@ public class Computer {
 
 
 	//探索
-	public void search() {		//～～～！！！～～～
+	public void search() {
+		if(mode == "hard") {
+			search_hard();
+		}
+		if(mode == "normal") {
+			search_normal();
+		}
+		if(mode == "easy") {
+			search_easy();
+		}
+	}
+	//ここまで探索
+
+
+
+	//ハードモード
+	public void search_hard() {
 		int count1=0,count2=0;
 		select1=-1;select2=-1;
 		reset_point(point1,-1000);
@@ -327,7 +344,91 @@ public class Computer {
 			}
 		}
 	}
-	//ここまで探索
+	//ここまでハードモード
+
+
+
+	//ノーマルモード
+	public void search_normal() {
+		int count1,count2=0;
+		count1=count_possible(grids_possible);
+		Random r = new Random();
+		int n =r.nextInt(count1);
+		for(int i=1;i<9;i++) {
+			for(int j=1;j<9;j++) {
+				if(grids_possible[i][j] == 3) {
+					if(count2==n) {
+						select1=j*8+i;
+					}
+					count2++;
+				}
+			}
+		}
+	}
+	//ここまでノーマルモード
+
+
+
+	//イージーモード
+	public void search_easy() {
+		int count1=0,count2=0;
+		select1=-1;select2=-1;
+		reset_point(point1,1000);
+		reset_point(point2,-1000);
+		for(int i=1;i<9;i++) {
+			for(int j=1;j<9;j++) {
+				if(grids_possible[i][j] == 3) {		//パスの場合を考える必要あり
+					copy_grids(grids_temp1,grids);
+					turnover(grids_temp1,i,j,myColor,yourColor);
+					copy_grids(grids_temp1_possible,grids_temp1);
+					turnover_possible(grids_temp1_possible,grids_temp1,yourColor,myColor);
+					count2=0;
+					for(int k=1;k<9;k++) {
+						for(int l=1;l<9;l++) {
+							if(grids_temp1_possible[k][l] == 3) {		//パスの場合を考える必要あり
+								point2[count2]=0;
+								copy_grids(grids_temp2,grids_temp1);
+								turnover(grids_temp2,k,l,yourColor,myColor);
+								copy_grids(grids_temp2_possible,grids_temp2);
+								turnover_possible(grids_temp2_possible,grids_temp2,myColor,yourColor);
+								//評価値計算
+								point2[count2]+=count_possible(grids_temp2_possible);	//自分の打てるマス数
+
+								copy_grids(grids_temp2_possible,grids_temp2);
+								turnover_possible(grids_temp2_possible,grids_temp2,yourColor,myColor);
+								//評価値計算
+								point2[count2]-=count_possible(grids_temp2_possible);	//相手の打てるマス数
+
+								//評価値計算
+								point2[count2]+=count_x(grids_temp2,yourColor)*10;	//角なし時の相手のX数
+								point2[count2]-=count_x(grids_temp2,myColor)*10;	//角なし時の自分のX数
+
+								copy_grids(grids_keep,grids_temp2);
+								//評価値計算
+								point2[count2]+=count_keep(grids_keep,myColor)*10;		//自分の確定石数
+
+								copy_grids(grids_keep,grids_temp2);
+								//評価値計算
+								point2[count2]-=count_keep(grids_keep,yourColor)*10;	//相手の確定石数
+
+								if(point2[select2]<point2[count2]) {
+									select2=count2;
+								}
+							}
+							count2++;
+						}
+					}
+					point1[count1]=point2[select2];
+					if(point1[select1]>point1[count1]) {
+						select1=count1;
+					}
+				}
+				count1++;
+			}
+		}
+	}
+	//ここまでイージーモード
+
 
 
 
@@ -409,17 +510,20 @@ public class Computer {
 			}
 		}
 
-
 		return count;
 	}
 
 	//出力
 	public int get_select(int a) {		//打たれた手が0～63の表記の場合の記述
-		turnover(grids,a%8+1,a/8+1,yourColor,myColor);		//ひっくり返す
+		if(a!=-1) {
+			turnover(grids,a%8+1,a/8+1,yourColor,myColor);		//ひっくり返す
+		}
 		copy_grids(grids_possible,grids);		//盤面をコピー
 		turnover_possible(grids_possible,grids,myColor,yourColor);//打てるマス記入
 		search();		//～～～～～これでselect1が最適の手になる～～～～～
-		turnover(grids,select1%8,select1/8,myColor,yourColor);		//ひっくり返す
+		if(select1!=-1) {
+			turnover(grids,select1%8,select1/8,myColor,yourColor);		//ひっくり返す
+		}
 		return select1;
 	}
 
