@@ -192,7 +192,8 @@ public class Client extends JFrame implements MouseListener {
 		String command = theButton.getActionCommand();//ボタンの名前を取り出す
 		System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
 		sendMessage(command); //テスト用にメッセージを送信
-		grids[Integer.parseInt(command)] = color;
+		game.putStone(Integer.parseInt(command), color);
+		game.okPut(color);
 		updateDisp();
 	}
 	public void mouseEntered(MouseEvent e) {}//マウスがオブジェクトに入ったときの処理
