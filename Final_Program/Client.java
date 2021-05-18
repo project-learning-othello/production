@@ -193,7 +193,7 @@ public class Client extends JFrame implements MouseListener {
 		System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
 		sendMessage(command); //テスト用にメッセージを送信
 		game.putStone(Integer.parseInt(command), color);
-		game.okPut(color);
+
 		updateDisp();
 	}
 	public void mouseEntered(MouseEvent e) {}//マウスがオブジェクトに入ったときの処理
