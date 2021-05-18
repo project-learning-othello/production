@@ -183,7 +183,7 @@ public class ServerSample2{
 	}
 
 	public static void main(String[] args){ //main
-		ServerSample2 server = new ServerSample2(10001); //待ち受けポート10000番でサーバオブジェクトを準備
+		ServerSample2 server = new ServerSample2(10000); //待ち受けポート10000番でサーバオブジェクトを準備
 		server.acceptClient(); //クライアント受け入れを開始
 	}
 }
