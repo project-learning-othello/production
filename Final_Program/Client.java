@@ -4,7 +4,9 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -27,16 +29,19 @@ public class Client extends JFrame implements MouseListener {
 	private String [] grids;
 	private int row; //オセロ盤の縦横マスの数
 	private String color; // 先手後手情報
+	private String turn; // 手番情報
 
 	// コンストラクタ
 	public Client(Othello game, Player player) {
 		this.game = game; // 引数のOthelloオブジェクトを渡す
 		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
-		game.okPut("black");
 		grids = new String[row * row];
 		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
 		this.player = player; // 引数のPlayerオブジェクトを渡す
 		color = player.getColor();
+		if(color == "black") {
+			game.okPut(color);
+		}
 
 		//ウィンドウ設定
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
@@ -132,14 +137,50 @@ public class Client extends JFrame implements MouseListener {
 		System.out.println("サーバにメッセージ " + msg + " を送信しました"); //テスト標準出力
 	}
 
+	// データ受信用スレッド(内部クラス)
+		class Receiver extends Thread {
+			private InputStreamReader sisr; //受信データ用文字ストリーム
+			private BufferedReader br; //文字ストリーム用のバッファ
+
+			// 内部クラスReceiverのコンストラクタ
+			Receiver (Socket socket){
+				try{
+					sisr = new InputStreamReader(socket.getInputStream()); //受信したバイトデータを文字ストリームに
+					br = new BufferedReader(sisr);//文字ストリームをバッファリングする
+				} catch (IOException e) {
+					System.err.println("データ受信時にエラーが発生しました: " + e);
+				}
+			}
+			// 内部クラス Receiverのメソッド
+			public void run(){
+				try{
+					while(true) {//データを受信し続ける
+						String inputLine = br.readLine();//受信データを一行分読み込む
+						if (inputLine != null){//データを受信したら
+							receiveMessage(inputLine);//データ受信用メソッドを呼び出す
+						}
+					}
+				} catch (IOException e){
+					System.err.println("データ受信時にエラーが発生しました: " + e);
+				}
+			}
+		}
+
 	public void receiveMessage(String msg){	// メッセージの受信
 		System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
 	}
+
 	public void updateDisp(){	// 画面を更新する
 		c.removeAll();
 		paint();
 	}
+
 	public void acceptOperation(String command){	// プレイヤの操作を受付
+		turn = game.getTurn();
+
+		if(turn == color) {
+
+		}
 	}
 
   	//マウスクリック時の処理
@@ -147,7 +188,7 @@ public class Client extends JFrame implements MouseListener {
 		JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．キャストを忘れずに
 		String command = theButton.getActionCommand();//ボタンの名前を取り出す
 		System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
-//		sendMessage(command); //テスト用にメッセージを送信
+		sendMessage(command); //テスト用にメッセージを送信
 		grids[Integer.parseInt(command)] = color;
 		updateDisp();
 	}
@@ -163,6 +204,6 @@ public class Client extends JFrame implements MouseListener {
 		player.setColor("black");
 		Client oclient = new Client(game, player);
 		oclient.setVisible(true);
-//		oclient.connectServer("localhost", 10000);
+		oclient.connectServer("192.168.1.5", 10000);
 	}
 }
