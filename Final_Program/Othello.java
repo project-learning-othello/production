@@ -117,7 +117,7 @@ public class Othello {
 		return put_flag;
 	}
 
-	public void putStone(int put_place, String color, boolean effect_on){ // (操作を)局面に反映
+	public void putStone(int put_place, String color){ // (操作を)局面に反映
 		String notColor;
 
 		if(color == "black") {
@@ -154,7 +154,7 @@ public class Othello {
 		}
 	}
 
-	public void remove_put() {
+	public void remove_put() { // "put"を戻す
 		for(int i = 0; i < row; i++) {
 			for(int j = 0; j < row; j++) {
 				if(grids[j][i] == "put") {
