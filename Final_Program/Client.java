@@ -37,6 +37,18 @@ public class Client extends JFrame implements MouseListener {
 	public Client(Othello game, Player player) {
 		this.game = game; // 引数のOthelloオブジェクトを渡す
 		this.player = player; // 引数のPlayerオブジェクトを渡す
+
+		//ウィンドウ設定
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
+		setTitle("ネットワーク対戦型オセロゲーム");//ウィンドウのタイトル
+		setSize(row * 45 + 25, row * 45 + 250);//ウィンドウのサイズを設定
+		c = getContentPane();//フレームのペインを取得
+
+		//アイコン設定(画像ファイルをアイコンとして使う)
+		whiteIcon = new ImageIcon("White.jpg");
+		blackIcon = new ImageIcon("Black.jpg");
+		boardIcon = new ImageIcon("GreenFrame.jpg");
+		putIcon = new ImageIcon("Put.jpg");
 	}
 
 	// メソッド
@@ -163,18 +175,6 @@ public class Client extends JFrame implements MouseListener {
 		}
 		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
 
-		//ウィンドウ設定
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
-		setTitle("ネットワーク対戦型オセロゲーム");//ウィンドウのタイトル
-		setSize(row * 45 + 25, row * 45 + 250);//ウィンドウのサイズを設定
-		c = getContentPane();//フレームのペインを取得
-
-		//アイコン設定(画像ファイルをアイコンとして使う)
-		whiteIcon = new ImageIcon("White.jpg");
-		blackIcon = new ImageIcon("Black.jpg");
-		boardIcon = new ImageIcon("GreenFrame.jpg");
-		putIcon = new ImageIcon("Put.jpg");
-
 		//描画
 		paint();
 	}
@@ -188,7 +188,6 @@ public class Client extends JFrame implements MouseListener {
 		turn = game.getTurn();
 
 		if(turn == color) {
-
 		}
 	}
 
