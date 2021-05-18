@@ -37,30 +37,6 @@ public class Client extends JFrame implements MouseListener {
 	public Client(Othello game, Player player) {
 		this.game = game; // 引数のOthelloオブジェクトを渡す
 		this.player = player; // 引数のPlayerオブジェクトを渡す
-
-		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
-		grids = new String[row * row];
-
-		color = player.getColor();
-		if(color == "black") {
-			game.okPut(color);
-		}
-		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
-
-		//ウィンドウ設定
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
-		setTitle("ネットワーク対戦型オセロゲーム");//ウィンドウのタイトル
-		setSize(row * 45 + 25, row * 45 + 250);//ウィンドウのサイズを設定
-		c = getContentPane();//フレームのペインを取得
-
-		//アイコン設定(画像ファイルをアイコンとして使う)
-		whiteIcon = new ImageIcon("White.jpg");
-		blackIcon = new ImageIcon("Black.jpg");
-		boardIcon = new ImageIcon("GreenFrame.jpg");
-		putIcon = new ImageIcon("Put.jpg");
-
-		//描画
-		paint();
 	}
 
 	// メソッド
@@ -177,11 +153,27 @@ public class Client extends JFrame implements MouseListener {
 
 	public void receiveMessage(String msg){	// メッセージの受信
 		System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
+		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
+		grids = new String[row * row];
+
+		player.setColor(msg);
 		color = player.getColor();
 		if(color == "black") {
 			game.okPut(color);
 		}
 		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
+
+		//ウィンドウ設定
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
+		setTitle("ネットワーク対戦型オセロゲーム");//ウィンドウのタイトル
+		setSize(row * 45 + 25, row * 45 + 250);//ウィンドウのサイズを設定
+		c = getContentPane();//フレームのペインを取得
+
+		//アイコン設定(画像ファイルをアイコンとして使う)
+		whiteIcon = new ImageIcon("White.jpg");
+		blackIcon = new ImageIcon("Black.jpg");
+		boardIcon = new ImageIcon("GreenFrame.jpg");
+		putIcon = new ImageIcon("Put.jpg");
 
 		//描画
 		paint();
@@ -205,7 +197,7 @@ public class Client extends JFrame implements MouseListener {
 		JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．キャストを忘れずに
 		String command = theButton.getActionCommand();//ボタンの名前を取り出す
 		System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
-//		sendMessage(command); //テスト用にメッセージを送信
+		sendMessage(command); //テスト用にメッセージを送信
 		game.putStone(Integer.parseInt(command), color);
 		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
 
@@ -220,9 +212,8 @@ public class Client extends JFrame implements MouseListener {
 	public static void main(String args[]){
 		Othello game = new Othello();
 		Player player = new Player();
-		player.setColor("black");
 		Client oclient = new Client(game, player);
 		oclient.setVisible(true);
-//		oclient.connectServer("192.168.1.5", 10000);
+		oclient.connectServer("192.168.1.5", 10000);
 	}
 }
