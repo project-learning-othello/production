@@ -52,7 +52,7 @@ public class Othello {
 	}
 
 	public void changeTurn(){ // 手番を変更
-		if(turn == "black") {
+		if(turn.equals("black")) {
 			turn = "white";
 		}else {
 			turn = "black";
@@ -78,7 +78,7 @@ public class Othello {
 		boolean put_flag = false;
 		String notColor;
 
-		if(color == "black") {
+		if(color.equals("black")) {
 			notColor = "white";
 		}else {
 			notColor = "black";
@@ -86,7 +86,7 @@ public class Othello {
 
 		for(int i = 0; i < row; i++) {
 			for(int j = 0; j < row; j++) {
-				if(grids[j][i] == notColor) {
+				if(grids[j][i].equals(notColor)) {
 					for(int k = 0; k < direction_num; k++) {
 						if(j + direction[k][0] >= 0 && j + direction[k][0] <= row - 1 && i + direction[k][1] >= 0 && i + direction[k][1] <= row - 1) {
 							if(grids[j + direction[k][0]][i + direction[k][1]] == "board") {
@@ -97,14 +97,14 @@ public class Othello {
 						int x = i, y = j;
 
 						if(board_flag[k]) {
-							while(grids[y][x] == notColor) {
+							while(grids[y][x].equals(notColor)) {
 								if(y - direction[k][0] >= 0 && y - direction[k][0] <= row - 1 && x - direction[k][1] >= 0 && x - direction[k][1] <= row - 1) {
 									y = y - direction[k][0];
 									x = x - direction[k][1];
 								}
 							}
 
-							if(grids[y][x] == color) {
+							if(grids[y][x].equals(color)) {
 								grids[j + direction[k][0]][i + direction[k][1]] = "put";
 								put_flag = true;
 							}
@@ -120,7 +120,7 @@ public class Othello {
 	public void putStone(int put_place, String color){ // (操作を)局面に反映
 		String notColor;
 
-		if(color == "black") {
+		if(color.equals("black")) {
 			notColor = "white";
 		}else {
 			notColor = "black";
@@ -137,7 +137,7 @@ public class Othello {
 				System.out.println(y);
 			}
 
-			while(grids[y][x] == notColor) {
+			while(grids[y][x].equals(notColor)) {
 				if(y + direction[k][0] >= 0 && y + direction[k][0] <= row - 1 && x + direction[k][1] >= 0 && x + direction[k][1] <= row - 1) {
 					y = y + direction[k][0];
 					x = x + direction[k][1];
@@ -145,7 +145,7 @@ public class Othello {
 				}
 			}
 
-			if(grids[y][x] == color && notColor_flag) {
+			if(grids[y][x].equals(color) && notColor_flag) {
 				while(x != put_place % row || y != put_place / row) {
 					y = y - direction[k][0];
 					x = x - direction[k][1];
@@ -163,7 +163,7 @@ public class Othello {
 	public void remove_put() { // "put"を戻す
 		for(int i = 0; i < row; i++) {
 			for(int j = 0; j < row; j++) {
-				if(grids[j][i] == "put") {
+				if(grids[j][i].equals("put")) {
 					grids[j][i] = "board";
 				}
 			}
@@ -178,7 +178,7 @@ public class Othello {
 		int nw = 0;
 		for(int i = 0; i < row; i++){
 			for(int j = 0; j < row; j++) {
-				if(grids[j][i] == "white") {
+				if(grids[j][i].equals("white")) {
 					nw++;
 				}
 			}
@@ -190,7 +190,7 @@ public class Othello {
 		int nb = 0;
 		for(int i = 0; i < row; i++){
 			for(int j = 0; j < row; j++) {
-				if(grids[j][i] == "black") {
+				if(grids[j][i].equals("black")) {
 					nb++;
 				}
 			}
