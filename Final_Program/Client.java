@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -35,14 +36,16 @@ public class Client extends JFrame implements MouseListener {
 	// コンストラクタ
 	public Client(Othello game, Player player) {
 		this.game = game; // 引数のOthelloオブジェクトを渡す
+		this.player = player; // 引数のPlayerオブジェクトを渡す
+
 		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
 		grids = new String[row * row];
-		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
-		this.player = player; // 引数のPlayerオブジェクトを渡す
+
 		color = player.getColor();
 		if(color == "black") {
 			game.okPut(color);
 		}
+		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
 
 		//ウィンドウ設定
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//ウィンドウを閉じる場合の処理
@@ -125,6 +128,9 @@ public class Client extends JFrame implements MouseListener {
 			out = new PrintWriter(socket.getOutputStream(), true); //データ送信用オブジェクトの用意
 			receiver = new Receiver(socket); //受信用オブジェクトの準備
 			receiver.start();//受信用オブジェクト(スレッド)起動
+			InetAddress addr = InetAddress.getLocalHost();
+			InetAddress addr2 = InetAddress.getLocalHost();
+			out.println(addr.getHostAddress());
 		} catch (UnknownHostException e) {
 			System.err.println("ホストのIPアドレスが判定できません: " + e);
 			System.exit(-1);
@@ -171,6 +177,14 @@ public class Client extends JFrame implements MouseListener {
 
 	public void receiveMessage(String msg){	// メッセージの受信
 		System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
+		color = player.getColor();
+		if(color == "black") {
+			game.okPut(color);
+		}
+		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
+
+		//描画
+		paint();
 	}
 
 	public void updateDisp(){	// 画面を更新する
@@ -191,8 +205,9 @@ public class Client extends JFrame implements MouseListener {
 		JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る．キャストを忘れずに
 		String command = theButton.getActionCommand();//ボタンの名前を取り出す
 		System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
-		sendMessage(command); //テスト用にメッセージを送信
+//		sendMessage(command); //テスト用にメッセージを送信
 		game.putStone(Integer.parseInt(command), color);
+		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
 
 		updateDisp();
 	}
@@ -208,6 +223,6 @@ public class Client extends JFrame implements MouseListener {
 		player.setColor("black");
 		Client oclient = new Client(game, player);
 		oclient.setVisible(true);
-		oclient.connectServer("192.168.1.5", 10000);
+//		oclient.connectServer("192.168.1.5", 10000);
 	}
 }

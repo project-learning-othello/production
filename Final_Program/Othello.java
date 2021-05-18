@@ -44,7 +44,7 @@ public class Othello {
 
 		for(int i = 0; i < row; i++){ // 2次元配列を1次元配列に変換
 			for(int j = 0; j < row; j++) {
-				one_dimentional_grids[j + i * row] = grids[j][i];
+				one_dimentional_grids[j + i * row] = grids[i][j];
 			}
 		}
 
@@ -128,25 +128,31 @@ public class Othello {
 
 		for(int k = 0; k < direction_num; k++) {
 			int x = put_place % row, y = put_place / row;
+			boolean notColor_flag = false;
 
 			if(y + direction[k][0] >= 0 && y + direction[k][0] <= row - 1 && x + direction[k][1] >= 0 && x + direction[k][1] <= row - 1) {
 				y = y + direction[k][0];
 				x = x + direction[k][1];
+				System.out.print(x);
+				System.out.println(y);
 			}
 
 			while(grids[y][x] == notColor) {
 				if(y + direction[k][0] >= 0 && y + direction[k][0] <= row - 1 && x + direction[k][1] >= 0 && x + direction[k][1] <= row - 1) {
 					y = y + direction[k][0];
 					x = x + direction[k][1];
+					notColor_flag = true;
 				}
 			}
 
-			if(grids[y][x] == color) {
-				while(x == put_place % row && y == put_place / row) {
+			if(grids[y][x] == color && notColor_flag) {
+				while(x != put_place % row || y != put_place / row) {
 					y = y - direction[k][0];
 					x = x - direction[k][1];
-
 					grids[y][x] = color;
+
+					System.out.print(x);
+					System.out.println(y);
 				}
 			}
 
