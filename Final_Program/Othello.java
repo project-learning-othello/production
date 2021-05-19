@@ -26,9 +26,9 @@ public class Othello {
 
 	// メソッド
 	public String checkWinner(){	// 勝敗を判断
-		if(get_num_black() == get_num_white()) {
+		if(get_num("black") == get_num("white")) {
 			return "draw";
-		}else if(get_num_black() > get_num_white()) {
+		}else if(get_num("black") > get_num("white")) {
 			return "black";
 		}else {
 			return "white";
@@ -60,33 +60,36 @@ public class Othello {
 	}
 
 	public boolean isGameover(){ // 対局終了を判断
-		if(okPut("black") == false) {
-			remove_put();
-			if(okPut("white") == false) {
-				remove_put();
+		if(okPut() == false) {
+			changeTurn();
+			if(okPut() == false) {
 				return true;
 			}else {
+				remove_put();
+				changeTurn();
 				return false;
 			}
 		}else {
+			remove_put();
 			return false;
 		}
 	}
 
-	public boolean okPut(String color) {
-		boolean board_flag[] = {false, false, false, false, false, false, false, false};
+	public boolean okPut() {
 		boolean put_flag = false;
-		String notColor;
+		String notTurn;
 
-		if(color.equals("black")) {
-			notColor = "white";
+		if(turn.equals("black")) {
+			notTurn = "white";
 		}else {
-			notColor = "black";
+			notTurn = "black";
 		}
 
 		for(int i = 0; i < row; i++) {
 			for(int j = 0; j < row; j++) {
-				if(grids[j][i].equals(notColor)) {
+				boolean board_flag[] = {false, false, false, false, false, false, false, false};
+
+				if(grids[j][i].equals(notTurn)) {
 					for(int k = 0; k < direction_num; k++) {
 						if(j + direction[k][0] >= 0 && j + direction[k][0] <= row - 1 && i + direction[k][1] >= 0 && i + direction[k][1] <= row - 1) {
 							if(grids[j + direction[k][0]][i + direction[k][1]] == "board") {
@@ -97,14 +100,16 @@ public class Othello {
 						int x = i, y = j;
 
 						if(board_flag[k]) {
-							while(grids[y][x].equals(notColor)) {
+							while(grids[y][x].equals(notTurn)) {
 								if(y - direction[k][0] >= 0 && y - direction[k][0] <= row - 1 && x - direction[k][1] >= 0 && x - direction[k][1] <= row - 1) {
 									y = y - direction[k][0];
 									x = x - direction[k][1];
+								}else {
+									break;
 								}
 							}
 
-							if(grids[y][x].equals(color)) {
+							if(grids[y][x].equals(turn)) {
 								grids[j + direction[k][0]][i + direction[k][1]] = "put";
 								put_flag = true;
 							}
@@ -113,49 +118,44 @@ public class Othello {
 				}
 			}
 		}
-
 		return put_flag;
 	}
 
-	public void putStone(int put_place, String color){ // (操作を)局面に反映
-		String notColor;
+	public void putStone(int put_place){ // (操作を)局面に反映
+		String notTurn;
 
-		if(color.equals("black")) {
-			notColor = "white";
+		if(turn.equals("black")) {
+			notTurn = "white";
 		}else {
-			notColor = "black";
+			notTurn = "black";
 		}
 
 		for(int k = 0; k < direction_num; k++) {
 			int x = put_place % row, y = put_place / row;
-			boolean notColor_flag = false;
+			boolean notTurn_flag = false;
 
 			if(y + direction[k][0] >= 0 && y + direction[k][0] <= row - 1 && x + direction[k][1] >= 0 && x + direction[k][1] <= row - 1) {
 				y = y + direction[k][0];
 				x = x + direction[k][1];
-				System.out.print(x);
-				System.out.println(y);
 			}
 
-			while(grids[y][x].equals(notColor)) {
+			while(grids[y][x].equals(notTurn)) {
 				if(y + direction[k][0] >= 0 && y + direction[k][0] <= row - 1 && x + direction[k][1] >= 0 && x + direction[k][1] <= row - 1) {
 					y = y + direction[k][0];
 					x = x + direction[k][1];
-					notColor_flag = true;
+					notTurn_flag = true;
+				}else {
+					break;
 				}
 			}
 
-			if(grids[y][x].equals(color) && notColor_flag) {
+			if(grids[y][x].equals(turn) && notTurn_flag) {
 				while(x != put_place % row || y != put_place / row) {
 					y = y - direction[k][0];
 					x = x - direction[k][1];
-					grids[y][x] = color;
-
-					System.out.print(x);
-					System.out.println(y);
+					grids[y][x] = turn;
 				}
 			}
-
 			remove_put();
 		}
 	}
@@ -174,27 +174,16 @@ public class Othello {
 		return row;
 	}
 
-	public int get_num_white() { // 白の駒数を取得
-		int nw = 0;
+	public int get_num(String color) { // 駒数を取得
+		int n = 0;
 		for(int i = 0; i < row; i++){
 			for(int j = 0; j < row; j++) {
-				if(grids[j][i].equals("white")) {
-					nw++;
+				if(grids[i][j].equals(color)) {
+					n++;
 				}
 			}
 		}
-		return nw;
-	}
 
-	public int get_num_black() { // 黒の駒数を取得
-		int nb = 0;
-		for(int i = 0; i < row; i++){
-			for(int j = 0; j < row; j++) {
-				if(grids[j][i].equals("black")) {
-					nb++;
-				}
-			}
-		}
-		return nb;
+		return n;
 	}
 }
