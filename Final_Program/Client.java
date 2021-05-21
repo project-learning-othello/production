@@ -36,8 +36,8 @@ public class Client extends JFrame implements MouseListener {
 	private int row; //オセロ盤の縦横マスの数
 	private String color, opp_color; // 先手後手情報
 	private boolean flag; // 初期設定用フラグ
-	private boolean connection = true;
-	private boolean finishOthello = true; 
+	private boolean connection;
+	private boolean finishOthello;
 	private String winnerColor;
 
 	// コンストラクタ
@@ -47,6 +47,8 @@ public class Client extends JFrame implements MouseListener {
 		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
 		grids = new String[row * row];
 		flag = true;
+		connection = true;
+		finishOthello = true;
 		myFont = new Font("Arial",Font.PLAIN,24);
 		myFont2 = new Font("Arial",Font.PLAIN,36);
 
@@ -163,13 +165,11 @@ public class Client extends JFrame implements MouseListener {
 				winnerColor = game.checkWinner();
 				finishOthello = false;
 				updateDisp();
-			}else if(msg.equals("connectionError")){
-
+			}else if(msg.equals("connectionError")) {
 				connection = false;
 				winnerColor = color;
 				finishOthello = false;
 				updateDisp();
-
 			}else{
 				acceptOperation(msg);
 			}
@@ -178,9 +178,9 @@ public class Client extends JFrame implements MouseListener {
 
 	public void updateDisp(){ // 画面を更新する
 		c.removeAll();
-		c.setLayout(null);//
+		c.setLayout(null);
 
-			//オセロ盤の生成
+		//オセロ盤の生成
 		buttonArray = new JButton[row * row];//ボタンの配列を作成
 		for(int i = 0 ; i < row * row ; i++){
 			if(grids[i].equals("black")){ buttonArray[i] = new JButton(blackIcon);}//盤面状態に応じたアイコンを設定
@@ -214,33 +214,31 @@ public class Client extends JFrame implements MouseListener {
 		opp_num.setText(String.valueOf(game.get_num(opp_color)));
 		c.add(opp_num);
 
-		if(finishOthello){
-		// 名前表示用ラベル(自分)
-		my_stone = new JLabel(myIcon);
-		my_stone.setBounds(20, 450, 40, 40);
-		c.add(my_stone);
+		if(finishOthello) {
+			// 名前表示用ラベル(自分)
+			my_stone = new JLabel(myIcon);
+			my_stone.setBounds(20, 450, 40, 40);
+			c.add(my_stone);
 
-		if(color.equals(game.getTurn())){
-			my_nameLabel.setBorder(new LineBorder(Color.RED, 2, false));
+			if(color.equals(game.getTurn())){
+				my_nameLabel.setBorder(new LineBorder(Color.RED, 2, false));
+			}else {
+				my_nameLabel.setBorder(new LineBorder(Color.BLACK, 2, false));
+			}
+			c.add(my_nameLabel);
+
+			// 名前表示用ラベル(相手)
+			opp_stone = new JLabel(oppIcon);
+			opp_stone.setBounds(180, 450, 40, 40);
+			c.add(opp_stone);
+
+			if(color.equals(game.getTurn())){
+				opp_nameLabel.setBorder(new LineBorder(Color.BLACK, 2, false));
+			}else {
+				opp_nameLabel.setBorder(new LineBorder(Color.RED, 2, false));
+			}
+			c.add(opp_nameLabel);
 		}else {
-			my_nameLabel.setBorder(new LineBorder(Color.BLACK, 2, false));
-		}
-		c.add(my_nameLabel);
-
-		// 名前表示用ラベル(相手)
-		opp_stone = new JLabel(oppIcon);
-		opp_stone.setBounds(180, 450, 40, 40);
-		c.add(opp_stone);
-
-		if(color.equals(game.getTurn())){
-			opp_nameLabel.setBorder(new LineBorder(Color.BLACK, 2, false));
-		}else {
-			opp_nameLabel.setBorder(new LineBorder(Color.RED, 2, false));
-		}
-		c.add(opp_nameLabel);
-			
-		}else{
-
 			if(color.equals(winnerColor)){
 
 				my_stone = new JLabel("You Win!");
@@ -260,12 +258,10 @@ public class Client extends JFrame implements MouseListener {
 				my_stone.setBounds(100, 420, 180, 100);
 				my_stone.setFont(myFont2);
 				c.add(my_stone);
-			}		
-
+			}
 		}
 
 		c.repaint();
-
 	}
 
 	public void acceptOperation(String command){	// プレイヤの操作を受付
@@ -281,7 +277,6 @@ public class Client extends JFrame implements MouseListener {
 				winnerColor = game.checkWinner();
 				finishOthello = false;
 				updateDisp();
-
 			}else {
 				sendMessage("-1"); // メッセージを送信
 				game.changeTurn();
