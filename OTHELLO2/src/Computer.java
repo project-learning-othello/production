@@ -11,12 +11,12 @@ public class Computer {
 	int [][] grids_temp2 = new int[10][10];		//2手先の盤面
 	int [][] grids_temp2_possible = new int[10][10];		//打てるマスを3とする盤面
 	int [][] grids_keep = new int[10][10];			//確定石を数えるために使う
-	int [] point1 = new int[64];		//1手先の評価値を保持する配列
-	int [] point2 = new int[64];		//2手先の評価値を保持する配列
+	int [] point1 = new int[65];		//1手先の評価値を保持する配列
+	int [] point2 = new int[65];		//2手先の評価値を保持する配列
 	int select1,select2;		//暫定的に1番優秀な手(1手先と2手先)
 
 	//コンストラクタ
-	public Computer(String color, String mode) {//人(相手)側の色、難易度
+	public Computer(String color, String mode) {	//人(相手)側の色、難易度
 		this.mode = mode;
 		if(color == "white") {
 			myColor = 1;		//黒=1
@@ -59,7 +59,7 @@ public class Computer {
 		//置くマス
 		a[x][y] = c1;
 
-		//右
+		//下
 		if(a[x+1][y] == c2) {
 			do{
 				i++;
@@ -71,7 +71,7 @@ public class Computer {
 			}
 		}
 
-		//右上
+		//左下
 		i=0;
 		if(a[x+1][y-1] == c2) {
 			do{
@@ -84,7 +84,7 @@ public class Computer {
 			}
 		}
 
-		//上
+		//左
 		i=0;
 		if(a[x][y-1] == c2) {
 			do{
@@ -110,7 +110,7 @@ public class Computer {
 			}
 		}
 
-		//左
+		//上
 		i=0;
 		if(a[x-1][y] == c2) {
 			do{
@@ -123,7 +123,7 @@ public class Computer {
 			}
 		}
 
-		//左下
+		//右上
 		i=0;
 		if(a[x-1][y+1] == c2) {
 			do{
@@ -136,7 +136,7 @@ public class Computer {
 			}
 		}
 
-		//下
+		//右
 		i=0;
 		if(a[x][y+1] == c2) {
 			do{
@@ -172,34 +172,35 @@ public class Computer {
 		for(int i=1;i<9;i++) {
 			for(int j=1;j<9;j++) {
 				if(b[i][j] == 0) {
-					//右
+					//下
+					k=0;
 					if(a[i+1][j] == c2) {
 						do{
 							k++;
 						}while(a[i+k][j] == c2);
-						if(a[i+k][i] == c1) {
+						if(a[i+k][j] == c1) {
 							flag = 1;
 						}
 					}
 
-					//右上
+					//左下
 					k=0;
 					if(a[i+1][j-1] == c2) {
 						do{
 							k++;
 						}while(a[i+k][j-k] == c2);
-						if(a[i+k][i-k] == c1) {
+						if(a[i+k][j-k] == c1) {
 							flag = 1;
 						}
 					}
 
-					//上
+					//左
 					k=0;
 					if(a[i][j-1] == c2) {
 						do{
 							k++;
 						}while(a[i][j-k] == c2);
-						if(a[i][i-k] == c1) {
+						if(a[i][j-k] == c1) {
 							flag = 1;
 						}
 					}
@@ -210,34 +211,34 @@ public class Computer {
 						do{
 							k++;
 						}while(a[i-k][j-k] == c2);
-						if(a[i-k][i-k] == c1) {
+						if(a[i-k][j-k] == c1) {
 							flag = 1;
 						}
 					}
 
-					//左
+					//上
 					k=0;
 					if(a[i-1][j] == c2) {
 						do{
 							k++;
 						}while(a[i-k][j] == c2);
-						if(a[i-k][i] == c1) {
+						if(a[i-k][j] == c1) {
 							flag = 1;
 						}
 					}
 
-					//左下
+					//右上
 					k=0;
 					if(a[i-1][j+1] == c2) {
 						do{
 							k++;
 						}while(a[i-k][j+k] == c2);
-						if(a[i-k][i+k] == c1) {
+						if(a[i-k][j+k] == c1) {
 							flag = 1;
 						}
 					}
 
-					//下
+					//右
 					k=0;
 					if(a[i][j+1] == c2) {
 						do {
@@ -254,7 +255,7 @@ public class Computer {
 						do{
 							k++;
 						}while(a[i+k][j+k] == c2);
-						if(a[i+k][i+k] == c1) {
+						if(a[i+k][j+k] == c1) {
 							flag = 1;
 						}
 					}
@@ -289,7 +290,7 @@ public class Computer {
 	//ハードモード
 	public void search_hard() {
 		int count1=0,count2=0;
-		select1=-1;select2=-1;
+		select1=64;select2=64;
 		reset_point(point1,-1000);
 		reset_point(point2,1000);
 		for(int i=1;i<9;i++) {
@@ -358,7 +359,7 @@ public class Computer {
 			for(int j=1;j<9;j++) {
 				if(grids_possible[i][j] == 3) {
 					if(count2==n) {
-						select1=j*8+i;
+						select1=(i-1)*8+(j-1);
 					}
 					count2++;
 				}
@@ -372,7 +373,7 @@ public class Computer {
 	//イージーモード
 	public void search_easy() {
 		int count1=0,count2=0;
-		select1=-1;select2=-1;
+		select1=64;select2=64;
 		reset_point(point1,1000);
 		reset_point(point2,-1000);
 		for(int i=1;i<9;i++) {
@@ -434,7 +435,7 @@ public class Computer {
 
 	//探索の部品(ポイントリセット)
 	public void reset_point(int a[],int b) {		//bは初期ポイント値
-		for(int i=-1;i<64;i++) {
+		for(int i=0;i<65;i++) {
 			a[i]=b;
 		}
 	}
@@ -457,6 +458,7 @@ public class Computer {
 		int count=0;
 		int flag=0,flag_temp=0;
 		do{
+			flag=0;
 			for(int i=1;i<9;i++){
 				for(int j=1;j<9;j++){
 					if(grids_keep[i][j]==c){
@@ -464,6 +466,7 @@ public class Computer {
 						if(flag_temp==1){
 							flag=1;
 							count++;
+							flag_temp=0;
 						}
 					}
 				}
@@ -494,8 +497,8 @@ public class Computer {
 				count++;
 			}
 		}
-		if(a[8][1]==0) {
-			if(a[7][2]==c1) {
+		if(a[1][8]==0) {
+			if(a[2][7]==c1) {
 				count++;
 			}
 		}
@@ -516,13 +519,16 @@ public class Computer {
 	//出力
 	public int get_select(int a) {		//打たれた手が0～63の表記の場合の記述
 		if(a!=-1) {
-			turnover(grids,a%8+1,a/8+1,yourColor,myColor);		//ひっくり返す
+			turnover(grids,a/8+1,a%8+1,yourColor,myColor);		//ひっくり返す
 		}
 		copy_grids(grids_possible,grids);		//盤面をコピー
 		turnover_possible(grids_possible,grids,myColor,yourColor);//打てるマス記入
 		search();		//～～～～～これでselect1が最適の手になる～～～～～
-		if(select1!=-1) {
-			turnover(grids,select1%8,select1/8,myColor,yourColor);		//ひっくり返す
+		if(select1!=64) {
+			turnover(grids,select1/8+1,select1%8+1,myColor,yourColor);		//ひっくり返す
+		}
+		if(select1==64){
+			select1=-1;
 		}
 		return select1;
 	}
