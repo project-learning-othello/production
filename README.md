@@ -1,26 +1,11 @@
 # プロジェクトラーニング　制作
 
-## samplecodeの説明
-* ClientSample*.java, SimpleClient.java  
-クライアントプログラムのサンプルプログラム
+## メモ
 
-* EchorServer.java, ServerSample*.java  
-サーバプログラムのサンプルプログラム
+### 背景
 
-* OthelloSample1.java  
-オセロプログラムのサンプルプログラム
+緑　(0, 153, 0)
 
-* PlayerSample1.java  
-プレイヤプログラムのサンプルプログラム
+水色　(0, 204, 255)
 
-* Black.jpg, White.jpg, GreenFrame.jpg  
-駒と盤面の画像
-
-* 参考にするサンプルプログラム
-```
-SimpleClient.java
-ServerSample2.java
-OthelloSample1.java
-PlayerSample1.java
-Black.jpg, White.jpg, GreenFrame.jpg
-```
+ピンク　(255, 153, 255)
