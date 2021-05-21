@@ -270,10 +270,11 @@ public class VSCPU extends JFrame implements MouseListener {
 
 
 		cpu_place = cpu.get_select(Integer.parseInt(command));
-		game.putStone();
-		cpu.get_grids();
-		grids = game.getGrids();
-		updateDisp();
+		if(cpu_place != -1) {
+			game.putStone(cpu_place);
+			grids = game.getGrids();
+			updateDisp();
+		}
 
 		game.changeTurn();
 		game.okPut();
