@@ -1,4 +1,3 @@
-
 import java.util.Random;
 
 public class Computer {
@@ -374,8 +373,8 @@ public class Computer {
 	public void search_easy() {
 		int count1=0,count2=0;
 		select1=64;select2=64;
-		reset_point(point1,1000);
-		reset_point(point2,-1000);
+		reset_point(point1,10000);
+		reset_point(point2,-10000);
 		for(int i=1;i<9;i++) {
 			for(int j=1;j<9;j++) {
 				if(grids_possible[i][j] == 3) {		//パスの場合を考える必要あり
@@ -406,11 +405,11 @@ public class Computer {
 
 								copy_grids(grids_keep,grids_temp2);
 								//評価値計算
-								point2[count2]+=count_keep(grids_keep,myColor)*10;		//自分の確定石数
+								point2[count2]+=count_keep(grids_keep,myColor)*100;		//自分の確定石数
 
 								copy_grids(grids_keep,grids_temp2);
 								//評価値計算
-								point2[count2]-=count_keep(grids_keep,yourColor)*10;	//相手の確定石数
+								point2[count2]-=count_keep(grids_keep,yourColor)*100;	//相手の確定石数
 
 								if(point2[select2]<point2[count2]) {
 									select2=count2;
