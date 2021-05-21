@@ -24,7 +24,7 @@ public class Client extends JFrame implements MouseListener {
 	private JLabel my_num, opp_num;// 自分・相手の駒数表示
 	private JLabel my_nameLabel, opp_nameLabel; // 自分・相手の手番表示
 	private JLabel my_stone, opp_stone; // 自分・相手の駒表示
-	private Font myFont;
+	private Font myFont, myFont2;
 	private Container c; // コンテナ
 	private ImageIcon blackIcon, whiteIcon, boardIcon, putIcon; // アイコン
 	private ImageIcon myIcon, oppIcon; // 自分・相手のアイコン
@@ -48,6 +48,7 @@ public class Client extends JFrame implements MouseListener {
 		grids = new String[row * row];
 		flag = true;
 		myFont = new Font("Arial",Font.PLAIN,24);
+		myFont2 = new Font("Arial",Font.PLAIN,36);
 
 		// 自分の駒数
 		my_num = new JLabel("");
@@ -162,6 +163,13 @@ public class Client extends JFrame implements MouseListener {
 				winnerColor = game.checkWinner();
 				finishOthello = false;
 				updateDisp();
+			}else if(msg.equals("connectionError")){
+
+				connection = false;
+				winnerColor = color;
+				finishOthello = false;
+				updateDisp();
+
 			}else{
 				acceptOperation(msg);
 			}
@@ -236,21 +244,21 @@ public class Client extends JFrame implements MouseListener {
 			if(color.equals(winnerColor)){
 
 				my_stone = new JLabel("You Win!");
-				my_stone.setBounds(100, 450, 180, 100);
-				my_stone.setFont(myFont);
+				my_stone.setBounds(100, 420, 180, 100);
+				my_stone.setFont(myFont2);
 				c.add(my_stone);
 
 			}else if(opp_color.equals(winnerColor)){
 
 				my_stone = new JLabel("You Lose!");
-				my_stone.setBounds(100, 450, 180, 100);
-				my_stone.setFont(myFont);
+				my_stone.setBounds(100, 420, 180, 100);
+				my_stone.setFont(myFont2);
 				c.add(my_stone);
 
 			}else{
 				my_stone = new JLabel("Draw!");
-				my_stone.setBounds(100, 450, 180, 100);
-				my_stone.setFont(myFont);
+				my_stone.setBounds(100, 420, 180, 100);
+				my_stone.setFont(myFont2);
 				c.add(my_stone);
 			}		
 
