@@ -1,4 +1,3 @@
-
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dialog.ModalityType;
@@ -33,18 +32,32 @@ public class VSCPU extends JFrame implements MouseListener {
 	private String color, opp_color; // 先手後手情報
 	private boolean flag; // 初期設定用フラグ;
 	private String mode;
+	private int cpu_place;
 
 	// コンストラクタ
-	public VSCPU(Othello game, Player player,String color,String mode, ModalityType mt) {
+	public VSCPU(Othello game, Player player, Computer cpu, ModalityType mt) {
 		this.game = game; // 引数のOthelloオブジェクトを渡す
 		this.player = player; // 引数のPlayerオブジェクトを渡す
-        this.mode = mode;
-        this.color = color;
+		this.cpu = cpu;
 
 		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
 		grids = new String[row * row];
 		flag = true;
 		myFont = new Font("Arial",Font.PLAIN,24);
+
+
+		color = player.getColor();
+		if(color.equals("black")) {
+			game.okPut();
+			opp_color = "white";
+			myIcon = new ImageIcon("Black.jpg");
+			oppIcon = new ImageIcon("White.jpg");
+		}else {
+			opp_color = "black";
+			myIcon = new ImageIcon("White.jpg");
+			oppIcon = new ImageIcon("Black.jpg");
+		}
+		grids = game.getGrids(); // getGridメソッドにより局面情報を取得
 
 		// 自分の駒数
 		my_num = new JLabel("");
@@ -77,6 +90,8 @@ public class VSCPU extends JFrame implements MouseListener {
 		blackIcon = new ImageIcon("Black.jpg");
 		boardIcon = new ImageIcon("GreenFrame.jpg");
 		putIcon = new ImageIcon("Put.jpg");
+
+		updateDisp();
 	}
 
 /*
@@ -98,18 +113,15 @@ public class VSCPU extends JFrame implements MouseListener {
 			System.exit(-1);
 		}
 	}
-
 	public void sendMessage(String msg){	// サーバに操作情報を送信
 		out.println(msg);//送信データをバッファに書き出す
 		out.flush();//送信データを送る
 		System.out.println("サーバにメッセージ " + msg + " を送信しました"); //テスト標準出力
 	}
-
 	// データ受信用スレッド(内部クラス)
 	class Receiver extends Thread {
 		private InputStreamReader sisr; //受信データ用文字ストリーム
 		private BufferedReader br; //文字ストリーム用のバッファ
-
 		// 内部クラスReceiverのコンストラクタ
 		Receiver (Socket socket){
 			try{
@@ -133,10 +145,8 @@ public class VSCPU extends JFrame implements MouseListener {
 			}
 		}
 	}
-
 	public void receiveMessage(String msg){	// メッセージの受信
 		System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
-
 		if(flag) {
 			player.setColor(msg);
 			color = player.getColor();
@@ -253,16 +263,21 @@ public class VSCPU extends JFrame implements MouseListener {
 		game.changeTurn(); // 手番変更
 		updateDisp(); // 画面を更新する
 
-		Computer cpu = new Computer(color,mode);
-
-		game.putStone(cpu.get_select(Integer.parseInt(command)));
-
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(5000);
 		}catch(InterruptedException a) {
-
 		}
 
+
+		cpu_place = cpu.get_select(Integer.parseInt(command));
+		game.putStone();
+		cpu.get_grids();
+		grids = game.getGrids();
+		updateDisp();
+
+		game.changeTurn();
+		game.okPut();
+		grids = game.getGrids();
 		updateDisp(); // 画面を更新する
 
 		//sendMessage(command); // メッセージを送信
