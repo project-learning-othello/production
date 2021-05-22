@@ -1,5 +1,4 @@
 import java.awt.Dialog.ModalityType;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,9 +10,6 @@ import javax.swing.JRadioButton;
 import javax.swing.border.LineBorder;
 
 import java.awt.Font;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Color;
 
 
@@ -22,12 +18,6 @@ public class Option extends JFrame implements ActionListener {
 
 
 	private JLabel nameLabel1, nameLabel2, nameLabel3, nameLabel4;
-
-	private ImageIcon whiteIcon;
-
-	private ImageIcon blackIcon;
-
-	private Font myFont;
 
 	ButtonGroup bg1 = new ButtonGroup();
 
@@ -58,8 +48,6 @@ public class Option extends JFrame implements ActionListener {
 
 		StoneImage1 = "White.jpg";
 		StoneImage2 = "Black.jpg";
-
-		myFont = new Font("Arial",Font.PLAIN,24);
 		
 		nameLabel1 = new JLabel("設定");
 		//nameLabel1.setBackground(Color.RED);
