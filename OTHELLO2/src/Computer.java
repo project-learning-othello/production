@@ -605,6 +605,7 @@ public class Computer {
 
 
 
+		/*
 		//ここからテスト
 		System.out.println(point1[select1]);
 		for(int i=0;i<8;i++) {
@@ -614,6 +615,7 @@ public class Computer {
 			System.out.println("");
 		}
 		//ここまでテスト
+		 */
 
 
 
