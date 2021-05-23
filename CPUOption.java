@@ -8,7 +8,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JRadioButton;
 
 public class CPUOption extends JDialog implements ActionListener{
 
@@ -30,37 +29,14 @@ public class CPUOption extends JDialog implements ActionListener{
 
 	ButtonGroup bg2 = new ButtonGroup();
 
-	JRadioButton r11 = new JRadioButton("先手",true);
-	JRadioButton r12 = new JRadioButton("後手");
+	JButton r11 = new JButton("先手");
+	JButton r12 = new JButton("後手");
 
-	JRadioButton r21 = new JRadioButton("easy",true);
-	JRadioButton r22 = new JRadioButton("normal");
-	JRadioButton r23 = new JRadioButton("hard");
+	JButton r21 = new JButton("easy");
+	JButton r22 = new JButton("normal");
+	JButton r23 = new JButton("hard");
 
 	String mode;
-
-	public void actionPerformed(ActionEvent e){
-		if(e.getSource() == this.r11){
-			player.setColor("black");
-		}
-		if(e.getSource() == this.r12){
-			player.setColor("white");
-		}
-		if(e.getSource() == this.r21){
-			cpu = new Computer(player.getColor(), "easy");
-		}
-		if(e.getSource() == this.r22){
-			cpu = new Computer(player.getColor(), "normal");
-		}
-		if(e.getSource() == this.r23){
-			cpu = new Computer(player.getColor(), "hard");
-		}
-		if(e.getSource() == this.start){
-			VSCPU subWindow = new VSCPU(game,player,cpu, ModalityType.DOCUMENT_MODAL);
-			subWindow.setLocation(this.getLocation().x + this.getWidth() , this.getLocation().y);
-			subWindow.setVisible(true);
-		}
-	}
 
 	public CPUOption(OMainFrame mainFrame, ModalityType mt){
 		super(mainFrame, mt);
@@ -94,8 +70,8 @@ public class CPUOption extends JDialog implements ActionListener{
 		this.r12.setActionCommand("");
 		this.r12.addActionListener(this);
 
-		r11.setBounds(90, 180, 50, 50);
-		r12.setBounds(220, 180, 50, 50);
+		r11.setBounds(90, 180, 80, 50);
+		r12.setBounds(200, 180, 80, 50);
 		this.add(r11);
 		this.add(r12);
 
@@ -113,18 +89,41 @@ public class CPUOption extends JDialog implements ActionListener{
 		this.r22.addActionListener(this);
 		this.r23.setActionCommand("");
 		this.r23.addActionListener(this);
-		r21.setBounds(60, 340, 70, 50);
-		r22.setBounds(140, 340, 70, 50);
-		r23.setBounds(250, 340, 70, 50);
+		r21.setBounds(45, 340, 80, 50);
+		r22.setBounds(140, 340, 80, 50);
+		r23.setBounds(235, 340, 80, 50);
 		this.add(r21);
 		this.add(r22);
 		this.add(r23);
 
 		this.start = new JButton("対戦開始");
 		this.start.addActionListener(this);
-		start.setBounds(130, 430,90,50);
+		start.setBounds(135, 440,90,50);
 		this.add(this.start);
 
+	}
+
+	public void actionPerformed(ActionEvent e){
+		if(e.getSource() == this.r11){
+			player.setColor("black");
+		}
+		if(e.getSource() == this.r12){
+			player.setColor("white");
+		}
+		if(e.getSource() == this.r21){
+			cpu = new Computer(player.getColor(), "easy");
+		}
+		if(e.getSource() == this.r22){
+			cpu = new Computer(player.getColor(), "normal");
+		}
+		if(e.getSource() == this.r23){
+			cpu = new Computer(player.getColor(), "hard");
+		}
+		if(e.getSource() == this.start){
+			VSCPU subWindow = new VSCPU(game,player,cpu, ModalityType.DOCUMENT_MODAL);
+			subWindow.setLocation(this.getLocation().x + this.getWidth() , this.getLocation().y);
+			subWindow.setVisible(true);
+		}
 	}
 
 }
