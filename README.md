@@ -11,7 +11,7 @@
 
 ### OMainFrame
 
-・デザイン
+・タイトルデザイン
 
 ### CPUOption
 
