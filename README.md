@@ -4,6 +4,9 @@
 
 ・Finished_Product
 
+　`Finished_Product`内のソースコード、画像を全部ダウンロードして、  
+`Othellostart.java`を実行すれば動く.
+
 ## やること
 
 ### OMainFrame
@@ -20,6 +23,22 @@
 ・コンピュータが打った後に待つ処理を追加する. なぜかできなくて困り中.  
 ・一台目のコンピュータが接続後、二台目が接続するまで操作できないようにする.
 
+### OMainFrame, CPUOption, Option
+
+・背景の設定
+　Clientの背景設定を参考にしたらすぐ終わるはず. 
+
+```
+Container c;
+
+c = getContentPane(); //フレームのペインを取得
+c.setBackground(option.getBackColor()); // 背景色
+・
+・
+・
+c.add(～); // ボタンをcに貼りつける
+```
+
 ### パワーポイント
 
 ### 動作確認テスト
@@ -32,4 +51,6 @@
 
 ## 変更点
 
+・`OMainFrame`で設定をおしたときに`OptionWindow`クラスに移るようにした.
+・`Option`クラスは内部設定
 ・どいちゃんには悪いけど、戻るボタン消しました. ウインドウのxボタンで戻れるみたいなので...
