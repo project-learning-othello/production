@@ -474,7 +474,7 @@ public class Computer {
 				}
 			}
 		}while(flag==1);
-		if(a[1][1]==-1) {count=count+9;}
+		if(a[1][1]==-1) {count=count+9;}		//角は10、他の確定石は1、×100
 		if(a[1][8]==-1) {count=count+9;}
 		if(a[8][1]==-1) {count=count+9;}
 		if(a[8][8]==-1) {count=count+9;}
@@ -500,19 +500,34 @@ public class Computer {
 		int count=0;
 		int k=0,l=0;
 		if(a[1][1]==0) {		//角が空いているなら
-			if(a[2][2]==c1) {		//Xはアウト
+			if(a[2][2]==c1) {		//Xはアウト(-25)
 				count++;
-				count++;
+				k=0;
+				do{
+					k++;
+				}while(a[1+k][1+k] == c1);		//自分の色が続かなくなるところまで進む
+				if(a[1+k][1+k] == c2) {		//隣が相手の色ならアウト(星以外は更に-50=-75)
+					count++;
+					count++;
+				}
 			}
 			if(a[1][2]==c1) {		//Cに自分の色があるなら
 				k=0;
 				do{
 					k++;
 				}while(a[1][1+k] == c1);		//自分の色が続かなくなるところまで進む
-				if(a[1][1+k] == c2) {		//隣が相手の色ならアウト
+				if(a[1][1+k] == c2) {		//隣が相手の色ならアウト(-25)
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[1][1+k+l] == c2);		//相手の色が続かなくなるところまで進む
+					if(a[1][1+k+l] == c1) {		//その先が自分の色ならアウト(更に-50=-75)
+						count++;
+						count++;
+					}
 				}else if(a[1][1+k] == 0) {		//隣があいているなら
-					if(a[1][1+k+1] == c1) {		//その先が自分の色ならアウト
+					if(a[1][1+k+1] == c1) {		//その先が自分の色ならアウト(-50)
 						count++;
 						count++;
 					}else if(a[1][1+k+1] == c2) {		//角,自分...自分,空,相手,なら
@@ -520,7 +535,7 @@ public class Computer {
 						do{
 							l++;
 						}while(a[1][1+k+l] == c2);		//相手の色が続かなくなるところまで進む
-						if(a[1][1+k+l] == c1) {		//その先が自分の色ならアウト
+						if(a[1][1+k+l] == c1) {		//その先が自分の色ならアウト(-50)
 							count++;
 							count++;
 						}
@@ -534,6 +549,14 @@ public class Computer {
 				}while(a[1+k][1] == c1);
 				if(a[1+k][1] == c2) {
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[1+k+l][1] == c2);
+					if(a[1+k+l][1] == c1) {
+						count++;
+						count++;
+					}
 				}else if(a[1+k][1] == 0) {
 					if(a[1+k+1][1] == c1) {
 						count++;
@@ -555,7 +578,14 @@ public class Computer {
 		if(a[1][8]==0) {
 			if(a[2][7]==c1) {
 				count++;
-				count++;
+				k=0;
+				do{
+					k++;
+				}while(a[1+k][8-k] == c1);
+				if(a[1+k][8-k] == c2) {
+					count++;
+					count++;
+				}
 			}
 			if(a[1][7]==c1) {
 				k=0;
@@ -564,6 +594,14 @@ public class Computer {
 				}while(a[1][8-k] == c1);
 				if(a[1][8-k] == c2) {
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[1][8-k-l] == c2);
+					if(a[1][8-k-l] == c1) {
+						count++;
+						count++;
+					}
 				}else if(a[1][8-k] == 0) {
 					if(a[1][8-k-1] == c1) {
 						count++;
@@ -587,6 +625,14 @@ public class Computer {
 				}while(a[1+k][8] == c1);
 				if(a[1+k][8] == c2) {
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[1+k+l][8] == c2);
+					if(a[1+k+l][8] == c1) {
+						count++;
+						count++;
+					}
 				}else if(a[1+k][8] == 0) {
 					if(a[1+k+1][8] == c1) {
 						count++;
@@ -608,7 +654,14 @@ public class Computer {
 		if(a[8][1]==0) {
 			if(a[7][2]==c1) {
 				count++;
-				count++;
+				k=0;
+				do{
+					k++;
+				}while(a[8-k][1+k] == c1);
+				if(a[8-k][1+k] == c2) {
+					count++;
+					count++;
+				}
 			}
 			if(a[8][2]==c1) {
 				k=0;
@@ -617,6 +670,14 @@ public class Computer {
 				}while(a[8][1+k] == c1);
 				if(a[8][1+k] == c2) {
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[8][1+k+l] == c2);
+					if(a[8][1+k+l] == c1) {
+						count++;
+						count++;
+					}
 				}else if(a[8][1+k] == 0) {
 					if(a[8][1+k+1] == c1) {
 						count++;
@@ -640,6 +701,14 @@ public class Computer {
 				}while(a[8-k][1] == c1);
 				if(a[8-k][1] == c2) {
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[8-k-l][1] == c2);
+					if(a[8-k-l][1] == c1) {
+						count++;
+						count++;
+					}
 				}else if(a[8-k][1] == 0) {
 					if(a[8-k-1][1] == c1) {
 						count++;
@@ -661,7 +730,14 @@ public class Computer {
 		if(a[8][8]==0) {
 			if(a[7][7]==c1) {
 				count++;
-				count++;
+				k=0;
+				do{
+					k++;
+				}while(a[8-k][8-k] == c1);
+				if(a[8-k][8-k] == c2) {
+					count++;
+					count++;
+				}
 			}
 			if(a[8][7]==c1) {
 				k=0;
@@ -670,6 +746,14 @@ public class Computer {
 				}while(a[8][8-k] == c1);
 				if(a[8][8-k] == c2) {
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[8][8-k-l] == c2);
+					if(a[8][8-k-l] == c1) {
+						count++;
+						count++;
+					}
 				}else if(a[8][8-k] == 0) {
 					if(a[8][8-k-1] == c1) {
 						count++;
@@ -693,6 +777,14 @@ public class Computer {
 				}while(a[8-k][8] == c1);
 				if(a[8-k][8] == c2) {
 					count++;
+					l=0;
+					do{
+						l++;
+					}while(a[8-k-l][8] == c2);
+					if(a[8-k-l][8] == c1) {
+						count++;
+						count++;
+					}
 				}else if(a[8-k][8] == 0) {
 					if(a[8-k-1][8] == c1) {
 						count++;
