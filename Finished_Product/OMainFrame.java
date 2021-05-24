@@ -1,4 +1,5 @@
 import java.awt.Dialog.ModalityType;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,22 +23,30 @@ public class OMainFrame extends JFrame implements ActionListener {
 		this.setTitle("メインウインドウ");
 		this.setSize(8 * 45 + 25, 8 * 45 + 230);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new GridLayout(5, 1));
+		this.setLayout(null);
 
-		this.tytleLabel = new JLabel("REVERSI");
-		this.add(this.tytleLabel);
+		tytleLabel = new JLabel("REVERSI");
+		tytleLabel.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 50));
+		tytleLabel.setBounds(90, 50, 300, 100);
+		add(this.tytleLabel);
 
-		this.pvpButton = new JButton("対人対戦");
-		this.pvpButton.addActionListener(this);
-		this.add(this.pvpButton);
+		pvpButton = new JButton("対人対戦");
+		pvpButton.addActionListener(this);
+		pvpButton.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 30));
+		pvpButton.setBounds(60, 200, 250, 80);
+		add(this.pvpButton);
 
-		this.pveButton = new JButton("CPU対戦");
-		this.pveButton.addActionListener(this);
-		this.add(this.pveButton);
+		pveButton = new JButton("CPU対戦");
+		pveButton.addActionListener(this);
+		pveButton.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 30));
+		pveButton.setBounds(60, 300, 250, 80);
+		add(this.pveButton);
 
-		this.optionButton = new JButton("設定");
-		this.optionButton.addActionListener(this);
-		this.add(this.optionButton);
+		optionButton = new JButton("設定");
+		optionButton.addActionListener(this);
+		optionButton.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 30));
+		optionButton.setBounds(60, 400, 250, 80);
+		add(this.optionButton);
 
 		game = new Othello();
 		player = new Player();
