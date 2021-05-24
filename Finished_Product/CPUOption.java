@@ -1,18 +1,17 @@
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.border.LineBorder;
-import javax.swing.ImageIcon;
-
-import java.awt.Container;
 
 
 public class CPUOption extends JDialog implements ActionListener{
@@ -91,9 +90,9 @@ public class CPUOption extends JDialog implements ActionListener{
 		this.add(r11);
 		this.add(r12);
 
-		BlackImg = new ImageIcon("./images/Black.jpg");
-		WhiteImg = new ImageIcon("./images/White.jpg");
-		
+		BlackImg = new ImageIcon(option.getBlackImage());
+		WhiteImg = new ImageIcon(option.getWhiteImage());
+
 		RButtonBlack = new JRadioButton(BlackImg);
 		RButtonWhite = new JRadioButton(WhiteImg);
 
@@ -111,7 +110,7 @@ public class CPUOption extends JDialog implements ActionListener{
 		bg2.add(r21);
 		bg2.add(r22);
 		bg2.add(r23);
-		
+
 		r21.setBorder(border);
 		r22.setBorderPainted(false);
 		r23.setBorderPainted(false);

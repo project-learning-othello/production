@@ -1,3 +1,4 @@
+import java.awt.Container;
 import java.awt.Dialog.ModalityType;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -8,8 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
-
-import java.awt.Container;
 
 public class OptionWindow extends JFrame implements ActionListener {
 	private JLabel nameLabel1, nameLabel2, nameLabel3;
@@ -30,10 +29,10 @@ public class OptionWindow extends JFrame implements ActionListener {
 
 	private Option option;
 
-	private Container c, cMain;
+	private Container c, cFrame;
 
 
-	public OptionWindow(Option option, OMainFrame mainFrame, ModalityType mt, Container cMain){
+	public OptionWindow(Option option, OMainFrame mainFrame, ModalityType mt, Container c){
 
 		this.setTitle("メインウインドウ");
 		this.setSize(8 * 45 + 25, 8 * 45 + 230);
@@ -41,44 +40,45 @@ public class OptionWindow extends JFrame implements ActionListener {
 		this.setLayout(null);
 
 		this.option = option;
-		this.cMain = cMain;
+		this.c = c;
 
 		c = getContentPane(); //フレームのペインを取得
 		c.setBackground(option.getBackColor()); // 背景色
 
+		cFrame = getContentPane(); //フレームのペインを取得
+		cFrame.setBackground(option.getBackColor()); // 背景色
 
 		nameLabel1 = new JLabel("設定");
-		//nameLabel1.setBackground(Color.RED);
 
 		nameLabel1.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 30));
 		nameLabel1.setBounds(150, 20, 150, 50);
-		add(nameLabel1);
+		cFrame.add(nameLabel1);
 
 		nameLabel2 = new JLabel("石のデザインの変更");
 		nameLabel2.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 30));
 		nameLabel2.setBounds(50, 100, 300, 50);
-		add(nameLabel2);
+		cFrame.add(nameLabel2);
 
-		icon11 = new ImageIcon("./images/Black.jpg");
-		icon12 = new ImageIcon("./images/Five_B.jpg");
-		icon13 = new ImageIcon("./images/Star_B.jpg");
-		icon21 = new ImageIcon("./images/BackGround1.jpg");
-		icon22 = new ImageIcon("./images/BackGround2.jpg");
-		icon23 = new ImageIcon("./images/BackGround3.jpg");
+		icon11 = new ImageIcon("Black.jpg");
+		icon12 = new ImageIcon("Five_B.jpg");
+		icon13 = new ImageIcon("Star_B.jpg");
+		icon21 = new ImageIcon("BackGround1.jpg");
+		icon22 = new ImageIcon("BackGround2.jpg");
+		icon23 = new ImageIcon("BackGround3.jpg");
 
-		icon11_selected = new ImageIcon("./images/Black_O.jpg");
-		icon12_selected = new ImageIcon("./images/Five_O.jpg");
-		icon13_selected = new ImageIcon("./images/Star_O.jpg");
-		icon21_selected = new ImageIcon("./images/BackGround1_O.jpg");
-		icon22_selected = new ImageIcon("./images/BackGround2_O.jpg");
-		icon23_selected = new ImageIcon("./images/BackGround3_O.jpg");
+		icon11_selected = new ImageIcon("Black_O.jpg");
+		icon12_selected = new ImageIcon("Five_O.jpg");
+		icon13_selected = new ImageIcon("Star_O.jpg");
+		icon21_selected = new ImageIcon("BackGround1_O.jpg");
+		icon22_selected = new ImageIcon("BackGround2_O.jpg");
+		icon23_selected = new ImageIcon("BackGround3_O.jpg");
 
-		r11 = new JRadioButton(icon11/*, true*/);
-		r12 = new JRadioButton(icon12);
-		r13 = new JRadioButton(icon13);
-		r21 = new JRadioButton(icon21/*, true*/);
-		r22 = new JRadioButton(icon22);
-		r23 = new JRadioButton(icon23);
+		r11 = new JRadioButton(icon11, option.getFlag("normal"));
+		r12 = new JRadioButton(icon12, option.getFlag("five"));
+		r13 = new JRadioButton(icon13, option.getFlag("star"));
+		r21 = new JRadioButton(icon21, option.getFlag("green"));
+		r22 = new JRadioButton(icon22, option.getFlag("pink"));
+		r23 = new JRadioButton(icon23, option.getFlag("blue"));
 
 		bg1.add(r11);
 		bg1.add(r12);
@@ -92,46 +92,43 @@ public class OptionWindow extends JFrame implements ActionListener {
 
 		r11.setBounds(80, 200, 50, 50);
 		r11.setSelectedIcon(icon11_selected);
-		add(r11);
+		cFrame.add(r11);
 
 		r12.setBounds(160, 200, 50, 50);
 		r12.setSelectedIcon(icon12_selected);
-		add(r12);
+		cFrame.add(r12);
 
 		r13.setBounds(240, 200, 50, 50);
 		r13.setSelectedIcon(icon13_selected);
-		add(r13);
+		cFrame.add(r13);
 
 
 
 		nameLabel3 = new JLabel("背景変更");
 		nameLabel3.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 30));
 		nameLabel3.setBounds(125, 320, 300, 50);
-		add(nameLabel3);
+		cFrame.add(nameLabel3);
 
 
 
 		bg2.add(r21);
 		bg2.add(r22);
 		bg2.add(r23);
-		r21.setActionCommand("");
 		r21.addActionListener(this);
-		r22.setActionCommand("");
 		r22.addActionListener(this);
-		r23.setActionCommand("");
 		r23.addActionListener(this);
 
 		r21.setBounds(80, 420, 50, 50);
 		r21.setSelectedIcon(icon21_selected);
-		add(r21);
+		cFrame.add(r21);
 
 		r22.setBounds(160, 420, 50, 50);
 		r22.setSelectedIcon(icon22_selected);
-		add(r22);
+		cFrame.add(r22);
 
 		r23.setBounds(240, 420, 50, 50);
 		r23.setSelectedIcon(icon23_selected);
-		add(r23);
+		cFrame.add(r23);
 
 	}
 
@@ -152,17 +149,20 @@ public class OptionWindow extends JFrame implements ActionListener {
 		if(e.getSource() == this.r21){
 			//盤面のデザイン変更；
 			option.changeToGreen();
-			cMain.setBackground(option.getBackColor()); // 背景色
+			c.setBackground(option.getBackColor()); // 背景色
+			cFrame.setBackground(option.getBackColor()); // 背景色
 		}
 		if(e.getSource() == this.r22){
 			//盤面のデザイン変更；
 			option.changeToPink();
-			cMain.setBackground(option.getBackColor()); // 背景色
+			c.setBackground(option.getBackColor()); // 背景色
+			cFrame.setBackground(option.getBackColor()); // 背景色
 		}
 		if(e.getSource() == this.r23){
 			//盤面のデザイン変更；
 			option.changeToBlue();
-			cMain.setBackground(option.getBackColor()); // 背景色
+			c.setBackground(option.getBackColor()); // 背景色
+			cFrame.setBackground(option.getBackColor()); // 背景色
 		}
 	}
 

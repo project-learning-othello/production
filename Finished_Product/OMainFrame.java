@@ -1,3 +1,4 @@
+import java.awt.Container;
 import java.awt.Dialog.ModalityType;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -6,8 +7,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import java.awt.Container;
 
 public class OMainFrame extends JFrame implements ActionListener {
 	private JLabel tytleLabel; // タイトル用ラベル
@@ -23,7 +22,7 @@ public class OMainFrame extends JFrame implements ActionListener {
 	private Container c;
 
 	public OMainFrame(){
-		
+
 		this.setTitle("メインウインドウ");
 		this.setSize(8 * 45 + 25, 8 * 45 + 230);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
