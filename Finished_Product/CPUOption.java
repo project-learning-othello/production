@@ -1,12 +1,16 @@
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.border.LineBorder;
+import javax.swing.ImageIcon;
 
 public class CPUOption extends JDialog implements ActionListener{
 
@@ -31,7 +35,13 @@ public class CPUOption extends JDialog implements ActionListener{
 	private JButton r22 = new JButton("normal");
 	private JButton r23 = new JButton("hard");
 
+	private JRadioButton RButtonBlack, RButtonWhite;
+
 	String mode;
+
+	LineBorder border = new LineBorder(Color.RED, 2, true);
+
+	ImageIcon BlackImg, WhiteImg;
 
 	public CPUOption(Othello game, Player player, Option option, OMainFrame mainFrame, ModalityType mt){
 		super(mainFrame, mt);
@@ -58,15 +68,31 @@ public class CPUOption extends JDialog implements ActionListener{
 
 		bg1.add(r11);
 		bg1.add(r12);
+
+		r11.setBorder(border);
+		r12.setBorderPainted(false);
+
 		this.r11.setActionCommand("");
 		this.r11.addActionListener(this);
 		this.r12.setActionCommand("");
 		this.r12.addActionListener(this);
 
-		r11.setBounds(90, 180, 80, 50);
+		r11.setBounds(40, 180, 80, 50);
 		r12.setBounds(200, 180, 80, 50);
 		this.add(r11);
 		this.add(r12);
+
+		BlackImg = new ImageIcon("./images/Black.jpg");
+		WhiteImg = new ImageIcon("./images/White.jpg");
+		
+		RButtonBlack = new JRadioButton(BlackImg);
+		RButtonWhite = new JRadioButton(WhiteImg);
+
+		RButtonBlack.setBounds(130, 180, 50, 50);
+		RButtonWhite.setBounds(290, 180, 50, 50);
+
+		add(RButtonBlack);
+		add(RButtonWhite);
 
 		this.nameLabel = new JLabel("CPUの強さ");
 		nameLabel.setFont(new Font( "ＭＳ ゴシック" , Font.BOLD, 30));
@@ -76,6 +102,11 @@ public class CPUOption extends JDialog implements ActionListener{
 		bg2.add(r21);
 		bg2.add(r22);
 		bg2.add(r23);
+		
+		r21.setBorder(border);
+		r22.setBorderPainted(false);
+		r23.setBorderPainted(false);
+
 		this.r21.addActionListener(this);
 		this.r22.addActionListener(this);
 		this.r23.addActionListener(this);
@@ -98,18 +129,44 @@ public class CPUOption extends JDialog implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == this.r11){
 			player.setColor("black");
+			r12.setBorderPainted(false);
+			r11.setBorderPainted(true);
+			r11.setBorder(border);
+
 		}
 		if(e.getSource() == this.r12){
 			player.setColor("white");
+			r11.setBorderPainted(false);
+			r12.setBorderPainted(true);
+			r12.setBorder(border);
+
 		}
 		if(e.getSource() == this.r21){
 			mode = "easy";
+
+			r22.setBorderPainted(false);
+			r23.setBorderPainted(false);
+			r21.setBorderPainted(true);
+			r21.setBorder(border);
+
 		}
 		if(e.getSource() == this.r22){
 			mode = "normal";
+
+			r21.setBorderPainted(false);
+			r23.setBorderPainted(false);
+			r22.setBorderPainted(true);
+			r22.setBorder(border);
+
 		}
 		if(e.getSource() == this.r23){
 			mode = "hard";
+
+			r21.setBorderPainted(false);
+			r22.setBorderPainted(false);
+			r23.setBorderPainted(true);
+			r23.setBorder(border);
+
 		}
 		if(e.getSource() == this.start){
 			cpu = new Computer(player.getColor(), mode);
