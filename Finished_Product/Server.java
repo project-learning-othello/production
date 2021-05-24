@@ -94,6 +94,12 @@ public class Server{
 							filewriter.write("プレイヤー 2, ipアドレス" + ip2 + ", 時刻 " + date + "\r\n");
 							filewriter.write("対局開始\r\n");
 							filewriter.close();
+
+							out[0].println("gameStart");//受信データをバッファに書き出す
+							out[0].flush();
+							out[1].println("gameStart");//受信データをバッファに書き出す
+							out[1].flush();
+
 							i++;
 
 

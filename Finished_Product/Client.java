@@ -45,6 +45,8 @@ public class Client extends JFrame implements MouseListener {
 	private String winnerColor; // 勝利者の色
 	private int cpu_place;
 
+	private boolean startFlag;
+
 	// コンストラクタ
 	public Client(Othello game, Player player, Option option, Computer cpu, boolean pvpFlag, ModalityType mt) {
 		this.game = game; // 引数のOthelloオブジェクトを渡す
@@ -52,6 +54,7 @@ public class Client extends JFrame implements MouseListener {
 		this.option = option;
 		this.cpu = cpu;
 		this.pvpFlag = pvpFlag;
+		this.startFlag = true;
 
 		// 初期設定
 		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
@@ -96,8 +99,8 @@ public class Client extends JFrame implements MouseListener {
 		//アイコン設定(画像ファイルをアイコンとして使う)
 		whiteIcon = new ImageIcon(option.getWhiteImage());
 		blackIcon = new ImageIcon(option.getBlackImage());
-		boardIcon = new ImageIcon("GreenFrame.jpg");
-		putIcon = new ImageIcon("Put.jpg");
+		boardIcon = new ImageIcon("./images/GreenFrame.jpg");
+		putIcon = new ImageIcon("./images/Put.jpg");
 
 		if(!pvpFlag) {
 			initialSettings();
@@ -180,6 +183,7 @@ public class Client extends JFrame implements MouseListener {
 	public void receiveMessage(String msg){	// メッセージの受信
 		System.out.println("サーバからメッセージ " + msg + " を受信しました"); //テスト用標準出力
 
+
 		if(flag) {
 			flag = false;
 			player.setColor(msg);
@@ -192,9 +196,13 @@ public class Client extends JFrame implements MouseListener {
 				winnerColor = color;
 				finishOthello = false;
 				updateDisp();
+			}else if(msg.equals("gameStart")){
+				startFlag = false;
 			}else{
 				acceptOperation(msg);
 			}
+
+			
 		}
 	}
 
@@ -342,18 +350,22 @@ public class Client extends JFrame implements MouseListener {
 
   	//マウスクリック時の処理
 	public void mouseClicked(MouseEvent e) {
-		JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る
-		String command = theButton.getActionCommand();//ボタンの名前を取り出す
-		System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
-		game.putStone(Integer.parseInt(command)); // 駒をひっくり返す
-		grids = game.getGrids(); //getGridメソッドにより局面情報を取得
-		game.changeTurn(); // 手番変更
-		updateDisp(); // 画面を更新する
 
-		if(pvpFlag) {
-			sendMessage(command); // メッセージを送信
-		}else{
-			cpu_Turn(command);
+		if(!startFlag){
+			JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る
+			String command = theButton.getActionCommand();//ボタンの名前を取り出す
+			System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
+			game.putStone(Integer.parseInt(command)); // 駒をひっくり返す
+			grids = game.getGrids(); //getGridメソッドにより局面情報を取得
+			game.changeTurn(); // 手番変更
+			updateDisp(); // 画面を更新する
+	
+			if(pvpFlag) {
+				sendMessage(command); // メッセージを送信
+			}else{
+				cpu_Turn(command);
+			}
+	
 		}
 
 	}
