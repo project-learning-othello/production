@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
-
+import java.awt.Container;
 
 public class OptionWindow extends JFrame implements ActionListener {
 	private JLabel nameLabel1, nameLabel2, nameLabel3;
@@ -30,12 +30,22 @@ public class OptionWindow extends JFrame implements ActionListener {
 
 	private Option option;
 
-	public OptionWindow(Option option, OMainFrame mainFrame, ModalityType mt){
+	private Container c, cMain;
+
+
+	public OptionWindow(Option option, OMainFrame mainFrame, ModalityType mt, Container cMain){
 
 		this.setTitle("メインウインドウ");
 		this.setSize(8 * 45 + 25, 8 * 45 + 230);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLayout(null);
+
+		this.option = option;
+		this.cMain = cMain;
+
+		c = getContentPane(); //フレームのペインを取得
+		c.setBackground(option.getBackColor()); // 背景色
+
 
 		nameLabel1 = new JLabel("設定");
 		//nameLabel1.setBackground(Color.RED);
@@ -49,19 +59,19 @@ public class OptionWindow extends JFrame implements ActionListener {
 		nameLabel2.setBounds(50, 100, 300, 50);
 		add(nameLabel2);
 
-		icon11 = new ImageIcon("Black.jpg");
-		icon12 = new ImageIcon("Five_B.jpg");
-		icon13 = new ImageIcon("Star_B.jpg");
-		icon21 = new ImageIcon("BackGround1.jpg");
-		icon22 = new ImageIcon("BackGround2.jpg");
-		icon23 = new ImageIcon("BackGround3.jpg");
+		icon11 = new ImageIcon("./images/Black.jpg");
+		icon12 = new ImageIcon("./images/Five_B.jpg");
+		icon13 = new ImageIcon("./images/Star_B.jpg");
+		icon21 = new ImageIcon("./images/BackGround1.jpg");
+		icon22 = new ImageIcon("./images/BackGround2.jpg");
+		icon23 = new ImageIcon("./images/BackGround3.jpg");
 
-		icon11_selected = new ImageIcon("Black_O.jpg");
-		icon12_selected = new ImageIcon("Five_O.jpg");
-		icon13_selected = new ImageIcon("Star_O.jpg");
-		icon21_selected = new ImageIcon("BackGround1_O.jpg");
-		icon22_selected = new ImageIcon("BackGround2_O.jpg");
-		icon23_selected = new ImageIcon("BackGround3_O.jpg");
+		icon11_selected = new ImageIcon("./images/Black_O.jpg");
+		icon12_selected = new ImageIcon("./images/Five_O.jpg");
+		icon13_selected = new ImageIcon("./images/Star_O.jpg");
+		icon21_selected = new ImageIcon("./images/BackGround1_O.jpg");
+		icon22_selected = new ImageIcon("./images/BackGround2_O.jpg");
+		icon23_selected = new ImageIcon("./images/BackGround3_O.jpg");
 
 		r11 = new JRadioButton(icon11, true);
 		r12 = new JRadioButton(icon12);
@@ -123,7 +133,6 @@ public class OptionWindow extends JFrame implements ActionListener {
 		r23.setSelectedIcon(icon23_selected);
 		add(r23);
 
-		this.option = option;
 	}
 
 	public void actionPerformed(ActionEvent e){
@@ -143,14 +152,17 @@ public class OptionWindow extends JFrame implements ActionListener {
 		if(e.getSource() == this.r21){
 			//盤面のデザイン変更；
 			option.changeToGreen();
+			cMain.setBackground(option.getBackColor()); // 背景色
 		}
 		if(e.getSource() == this.r22){
 			//盤面のデザイン変更；
-			option.changeToBlue();
+			option.changeToPink();
+			cMain.setBackground(option.getBackColor()); // 背景色
 		}
 		if(e.getSource() == this.r23){
 			//盤面のデザイン変更；
-			option.changeToPink();
+			option.changeToBlue();
+			cMain.setBackground(option.getBackColor()); // 背景色
 		}
 	}
 

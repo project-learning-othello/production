@@ -12,6 +12,9 @@ import javax.swing.JRadioButton;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 
+import java.awt.Container;
+
+
 public class CPUOption extends JDialog implements ActionListener{
 
 	private Othello game; // Othelloオブジェクト
@@ -43,6 +46,8 @@ public class CPUOption extends JDialog implements ActionListener{
 
 	ImageIcon BlackImg, WhiteImg;
 
+	private Container c;
+
 	public CPUOption(Othello game, Player player, Option option, OMainFrame mainFrame, ModalityType mt){
 		super(mainFrame, mt);
 		this.mainFrame = mainFrame;
@@ -50,6 +55,10 @@ public class CPUOption extends JDialog implements ActionListener{
 		this.game = game;
 		this.player = player;
 		this.option = option;
+
+		c = getContentPane(); //フレームのペインを取得
+		c.setBackground(option.getBackColor()); // 背景色
+
 
 		this.setTitle("CPU設定");
 		this.setSize(8 * 45 + 25, 8 * 45 + 230);

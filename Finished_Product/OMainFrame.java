@@ -1,12 +1,13 @@
 import java.awt.Dialog.ModalityType;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import java.awt.Container;
 
 public class OMainFrame extends JFrame implements ActionListener {
 	private JLabel tytleLabel; // タイトル用ラベル
@@ -19,7 +20,10 @@ public class OMainFrame extends JFrame implements ActionListener {
 	private Option option; // Optionオブジェクト
 	private Computer cpu;
 
+	private Container c;
+
 	public OMainFrame(){
+		
 		this.setTitle("メインウインドウ");
 		this.setSize(8 * 45 + 25, 8 * 45 + 230);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,6 +55,10 @@ public class OMainFrame extends JFrame implements ActionListener {
 		game = new Othello();
 		player = new Player();
 		option = new Option();
+
+		c = getContentPane(); //フレームのペインを取得
+		c.setBackground(option.getBackColor()); // 背景色
+
 	}
 
 	public void actionPerformed(ActionEvent e){
@@ -67,7 +75,7 @@ public class OMainFrame extends JFrame implements ActionListener {
 			subWindow.setVisible(true);
 		}
 		if(e.getSource() == this.optionButton){
-			OptionWindow subWindow = new OptionWindow(option, this, ModalityType.DOCUMENT_MODAL);
+			OptionWindow subWindow = new OptionWindow(option, this, ModalityType.DOCUMENT_MODAL, c);
 			subWindow.setLocation(this.getLocation().x, this.getLocation().y);
 			subWindow.setVisible(true);
 		}
