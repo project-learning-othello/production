@@ -44,7 +44,6 @@ public class Client extends JFrame implements MouseListener {
 	private boolean finishOthello; // 対戦終了用フラグ
 	private String winnerColor; // 勝利者の色
 	private int cpu_place;
-
 	private boolean startFlag;
 
 	// コンストラクタ
@@ -54,7 +53,6 @@ public class Client extends JFrame implements MouseListener {
 		this.option = option;
 		this.cpu = cpu;
 		this.pvpFlag = pvpFlag;
-		this.startFlag = true;
 
 		// 初期設定
 		row = game.getRow(); //getRowメソッドによりオセロ盤の縦横マスの数を取得
@@ -62,6 +60,7 @@ public class Client extends JFrame implements MouseListener {
 		flag = true;
 		connection = true;
 		finishOthello = true;
+		startFlag = false;
 		myFont = new Font("Arial",Font.PLAIN,24);
 		myFont2 = new Font("Arial",Font.PLAIN,36);
 
@@ -99,8 +98,8 @@ public class Client extends JFrame implements MouseListener {
 		//アイコン設定(画像ファイルをアイコンとして使う)
 		whiteIcon = new ImageIcon(option.getWhiteImage());
 		blackIcon = new ImageIcon(option.getBlackImage());
-		boardIcon = new ImageIcon("./images/GreenFrame.jpg");
-		putIcon = new ImageIcon("./images/Put.jpg");
+		boardIcon = new ImageIcon("GreenFrame.jpg");
+		putIcon = new ImageIcon("Put.jpg");
 
 		if(!pvpFlag) {
 			initialSettings();
@@ -197,12 +196,12 @@ public class Client extends JFrame implements MouseListener {
 				finishOthello = false;
 				updateDisp();
 			}else if(msg.equals("gameStart")){
-				startFlag = false;
+				startFlag = true;
 			}else{
 				acceptOperation(msg);
 			}
 
-			
+
 		}
 	}
 
@@ -351,7 +350,7 @@ public class Client extends JFrame implements MouseListener {
   	//マウスクリック時の処理
 	public void mouseClicked(MouseEvent e) {
 
-		if(!startFlag){
+		if(startFlag || !pvpFlag){
 			JButton theButton = (JButton)e.getComponent();//クリックしたオブジェクトを得る
 			String command = theButton.getActionCommand();//ボタンの名前を取り出す
 			System.out.println("マウスがクリックされました。押されたボタンは " + command + "です。");//テスト用に標準出力
@@ -359,13 +358,13 @@ public class Client extends JFrame implements MouseListener {
 			grids = game.getGrids(); //getGridメソッドにより局面情報を取得
 			game.changeTurn(); // 手番変更
 			updateDisp(); // 画面を更新する
-	
+
 			if(pvpFlag) {
 				sendMessage(command); // メッセージを送信
 			}else{
 				cpu_Turn(command);
 			}
-	
+
 		}
 
 	}
