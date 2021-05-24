@@ -11,8 +11,8 @@
 
 ### OMainFrame
 
-・タイトルデザイン
-### <span style="color: red; ">土井が完了（5/24 12:00）</span>
+・タイトルデザイン ..... 土井が完了（5/24 12:00）
+
 
 ### CPUOption
 
