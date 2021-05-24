@@ -293,7 +293,7 @@ public class Computer {
 		reset_point(point1,-10000);
 		for(int i=1;i<9;i++) {
 			for(int j=1;j<9;j++) {
-				if(grids_possible[i][j] == 3) {		//パスの場合を考える必要あり
+				if(grids_possible[i][j] == 3) {
 					copy_grids(grids_temp1,grids);
 					turnover(grids_temp1,i,j,myColor,yourColor);
 					copy_grids(grids_temp1_possible,grids_temp1);
@@ -302,7 +302,7 @@ public class Computer {
 					reset_point(point2,10000);
 					for(int k=1;k<9;k++) {
 						for(int l=1;l<9;l++) {
-							if(grids_temp1_possible[k][l] == 3) {		//パスの場合を考える必要あり
+							if(grids_temp1_possible[k][l] == 3) {
 								point2[count2]=0;
 								copy_grids(grids_temp2,grids_temp1);
 								turnover(grids_temp2,k,l,yourColor,myColor);
@@ -317,16 +317,16 @@ public class Computer {
 								point2[count2]-=count_possible(grids_temp2_possible);	//相手の打てるマス数
 
 								//評価値計算
-								point2[count2]+=count_x(grids_temp2,yourColor,myColor)*10;	//角なし時の相手のX数
-								point2[count2]-=count_x(grids_temp2,myColor,yourColor)*10;	//角なし時の自分のX数
+								point2[count2]+=count_x(grids_temp2,yourColor,myColor)*25;	//角なし時の相手のX数
+								point2[count2]-=count_x(grids_temp2,myColor,yourColor)*25;	//角なし時の自分のX数
 
 								copy_grids(grids_keep,grids_temp2);
 								//評価値計算
-								point2[count2]+=count_keep(grids_keep,myColor)*100;		//自分の確定石数
+								point2[count2]+=count_keep(grids_keep,myColor)*100;		//自分の確定石数(角は1000)
 
 								copy_grids(grids_keep,grids_temp2);
 								//評価値計算
-								point2[count2]-=count_keep(grids_keep,yourColor)*100;	//相手の確定石数
+								point2[count2]-=count_keep(grids_keep,yourColor)*100;	//相手の確定石数(角は1000)
 
 								if(point2[select2]>point2[count2]) {
 									select2=count2;
@@ -403,16 +403,16 @@ public class Computer {
 								point2[count2]-=count_possible(grids_temp2_possible);	//相手の打てるマス数
 
 								//評価値計算
-								point2[count2]+=count_x(grids_temp2,yourColor,myColor)*10;	//角なし時の相手のX数
-								point2[count2]-=count_x(grids_temp2,myColor,yourColor)*10;	//角なし時の自分のX数
+								point2[count2]+=count_x(grids_temp2,yourColor,myColor)*25;	//角なし時の相手のX数
+								point2[count2]-=count_x(grids_temp2,myColor,yourColor)*25;	//角なし時の自分のX数
 
 								copy_grids(grids_keep,grids_temp2);
 								//評価値計算
-								point2[count2]+=count_keep(grids_keep,myColor)*100;		//自分の確定石数
+								point2[count2]+=count_keep(grids_keep,myColor)*100;		//自分の確定石数(角は1000)
 
 								copy_grids(grids_keep,grids_temp2);
 								//評価値計算
-								point2[count2]-=count_keep(grids_keep,yourColor)*100;	//相手の確定石数
+								point2[count2]-=count_keep(grids_keep,yourColor)*100;	//相手の確定石数(角は1000)
 
 								if(point2[select2]<point2[count2]) {
 									select2=count2;
@@ -474,6 +474,10 @@ public class Computer {
 				}
 			}
 		}while(flag==1);
+		if(a[1][1]==-1) {count=count+9;}
+		if(a[1][8]==-1) {count=count+9;}
+		if(a[8][1]==-1) {count=count+9;}
+		if(a[8][8]==-1) {count=count+9;}
 
 		return count;
 	}
@@ -494,18 +498,33 @@ public class Computer {
 	//探索の部品(角がないのにXやCに自分の色がある数）
 	public int count_x(int a[][],int c1,int c2) {
 		int count=0;
-		int k=0;
-		if(a[1][1]==0) {
-			if(a[2][2]==c1) {
+		int k=0,l=0;
+		if(a[1][1]==0) {		//角が空いているなら
+			if(a[2][2]==c1) {		//Xはアウト
+				count++;
 				count++;
 			}
-			if(a[1][2]==c1) {
+			if(a[1][2]==c1) {		//Cに自分の色があるなら
 				k=0;
 				do{
 					k++;
-				}while(a[1][1+k] == c1);
-				if(a[1][1+k] == c2) {
+				}while(a[1][1+k] == c1);		//自分の色が続かなくなるところまで進む
+				if(a[1][1+k] == c2) {		//隣が相手の色ならアウト
 					count++;
+				}else if(a[1][1+k] == 0) {		//隣があいているなら
+					if(a[1][1+k+1] == c1) {		//その先が自分の色ならアウト
+						count++;
+						count++;
+					}else if(a[1][1+k+1] == c2) {		//角,自分...自分,空,相手,なら
+						l=0;
+						do{
+							l++;
+						}while(a[1][1+k+l] == c2);		//相手の色が続かなくなるところまで進む
+						if(a[1][1+k+l] == c1) {		//その先が自分の色ならアウト
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 			if(a[2][1]==c1) {
@@ -515,12 +534,27 @@ public class Computer {
 				}while(a[1+k][1] == c1);
 				if(a[1+k][1] == c2) {
 					count++;
+				}else if(a[1+k][1] == 0) {
+					if(a[1+k+1][1] == c1) {
+						count++;
+						count++;
+					}else if(a[1+k+1][1] == c2) {
+						l=0;
+						do{
+							l++;
+						}while(a[1+k+l][1] == c2);
+						if(a[1+k+l][1] == c1) {
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 		}
 
 		if(a[1][8]==0) {
 			if(a[2][7]==c1) {
+				count++;
 				count++;
 			}
 			if(a[1][7]==c1) {
@@ -530,6 +564,20 @@ public class Computer {
 				}while(a[1][8-k] == c1);
 				if(a[1][8-k] == c2) {
 					count++;
+				}else if(a[1][8-k] == 0) {
+					if(a[1][8-k-1] == c1) {
+						count++;
+						count++;
+					}else if(a[1][8-k-1] == c2) {
+						l=0;
+						do{
+							l++;
+						}while(a[1][8-k-l] == c2);
+						if(a[1][8-k-l] == c1) {
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 			if(a[2][8]==c1) {
@@ -539,12 +587,27 @@ public class Computer {
 				}while(a[1+k][8] == c1);
 				if(a[1+k][8] == c2) {
 					count++;
+				}else if(a[1+k][8] == 0) {
+					if(a[1+k+1][8] == c1) {
+						count++;
+						count++;
+					}else if(a[1+k+1][8] == c2) {
+						l=0;
+						do{
+							l++;
+						}while(a[1+k+l][8] == c2);
+						if(a[1+k+l][8] == c1) {
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 		}
 
 		if(a[8][1]==0) {
 			if(a[7][2]==c1) {
+				count++;
 				count++;
 			}
 			if(a[8][2]==c1) {
@@ -554,6 +617,20 @@ public class Computer {
 				}while(a[8][1+k] == c1);
 				if(a[8][1+k] == c2) {
 					count++;
+				}else if(a[8][1+k] == 0) {
+					if(a[8][1+k+1] == c1) {
+						count++;
+						count++;
+					}else if(a[8][1+k+1] == c2) {
+						l=0;
+						do{
+							l++;
+						}while(a[8][1+k+l] == c2);
+						if(a[8][1+k+l] == c1) {
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 			if(a[7][1]==c1) {
@@ -563,12 +640,27 @@ public class Computer {
 				}while(a[8-k][1] == c1);
 				if(a[8-k][1] == c2) {
 					count++;
+				}else if(a[8-k][1] == 0) {
+					if(a[8-k-1][1] == c1) {
+						count++;
+						count++;
+					}else if(a[8-k-1][1] == c2) {
+						l=0;
+						do{
+							l++;
+						}while(a[8-k-l][1] == c2);
+						if(a[8-k-l][1] == c1) {
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 		}
 
 		if(a[8][8]==0) {
 			if(a[7][7]==c1) {
+				count++;
 				count++;
 			}
 			if(a[8][7]==c1) {
@@ -578,6 +670,20 @@ public class Computer {
 				}while(a[8][8-k] == c1);
 				if(a[8][8-k] == c2) {
 					count++;
+				}else if(a[8][8-k] == 0) {
+					if(a[8][8-k-1] == c1) {
+						count++;
+						count++;
+					}else if(a[8][8-k-1] == c2) {
+						l=0;
+						do{
+							l++;
+						}while(a[8][8-k-l] == c2);
+						if(a[8][8-k-l] == c1) {
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 			if(a[7][8]==c1) {
@@ -587,6 +693,20 @@ public class Computer {
 				}while(a[8-k][8] == c1);
 				if(a[8-k][8] == c2) {
 					count++;
+				}else if(a[8-k][8] == 0) {
+					if(a[8-k-1][8] == c1) {
+						count++;
+						count++;
+					}else if(a[8-k-1][8] == c2) {
+						l=0;
+						do{
+							l++;
+						}while(a[8-k-l][8] == c2);
+						if(a[8-k-l][8] == c1) {
+							count++;
+							count++;
+						}
+					}
 				}
 			}
 		}
@@ -607,6 +727,7 @@ public class Computer {
 
 		/*
 		//ここからテスト
+		//CPUの盤面の評価
 		System.out.println(point1[select1]);
 		for(int i=0;i<8;i++) {
 			for(int j=0;j<8;j++) {
@@ -614,8 +735,9 @@ public class Computer {
 			}
 			System.out.println("");
 		}
+		System.out.println("");
 		//ここまでテスト
-		 */
+		*/
 
 
 
