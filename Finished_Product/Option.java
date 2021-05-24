@@ -1,12 +1,12 @@
 import java.awt.Color;
 
 public class Option {
-	private String StoneImage_w, StoneImage_b;
+	private String StoneImage_w = "White.jpg", StoneImage_b = "Black.jpg";
 	private Color backColor;
 
 	public Option(){
-		StoneImage_w = "White.jpg";
-		StoneImage_b = "Black.jpg";
+		//StoneImage_w = "White.jpg";
+		//StoneImage_b = "Black.jpg";
 
 		backColor = new Color(0, 153, 0);
 	}
