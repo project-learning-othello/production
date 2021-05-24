@@ -73,10 +73,10 @@ public class OptionWindow extends JFrame implements ActionListener {
 		icon22_selected = new ImageIcon("./images/BackGround2_O.jpg");
 		icon23_selected = new ImageIcon("./images/BackGround3_O.jpg");
 
-		r11 = new JRadioButton(icon11, true);
+		r11 = new JRadioButton(icon11/*, true*/);
 		r12 = new JRadioButton(icon12);
 		r13 = new JRadioButton(icon13);
-		r21 = new JRadioButton(icon21, true);
+		r21 = new JRadioButton(icon21/*, true*/);
 		r22 = new JRadioButton(icon22);
 		r23 = new JRadioButton(icon23);
 
