@@ -60,12 +60,12 @@ public class Server{
 						if(n == 0){
 							ip1 = inputLine;
 							n++;
-							System.out.println("ip1: " + ip1);
+							System.out.println("プレイヤー0のipアドレス: " + ip1);
 
 						}else if(n == 1){
 							ip2 = inputLine;
 							n++;
-							System.out.println("ip2: " + ip2);
+							System.out.println("プレイヤー1のipアドレス: " + ip2);
 
 						}else{
 							System.out.println("プレイヤー " + playerNo + " から " + inputLine + " が送信されました");
@@ -82,7 +82,7 @@ public class Server{
 							date = new Date();
 							file = new File("log.txt");
 							filewriter = new FileWriter(file, true);
-							filewriter.write("プレイヤー 1, ipアドレス"+ ip1 + ", 時刻 " + date + "\r\n");
+							filewriter.write("プレイヤー 0, ipアドレス"+ ip1 + ", 時刻 " + date + "\r\n");
 							filewriter.close();
 							i++;
 
@@ -91,7 +91,7 @@ public class Server{
 							date = new Date();
 							file = new File("log.txt");
 							filewriter = new FileWriter(file, true);
-							filewriter.write("プレイヤー 2, ipアドレス" + ip2 + ", 時刻 " + date + "\r\n");
+							filewriter.write("プレイヤー 1, ipアドレス" + ip2 + ", 時刻 " + date + "\r\n");
 							filewriter.write("対局開始\r\n");
 							filewriter.close();
 
@@ -156,7 +156,7 @@ public class Server{
 
 			finishGame(0);
 		}else{
-			System.out.println("接続確認がおかしいよ．"); //テスト用出力
+			System.out.println("接続確認時にエラーが発生しました．"); //テスト用出力
 		}
 
 	}
@@ -170,7 +170,7 @@ public class Server{
 			out[playerNo].println("white");//受信データをバッファに書き出す
 			out[playerNo].flush();//受信データをそのまま返信する
 		}else{
-			System.out.println("人数がおかしいよ．"); //テスト用出力
+			System.out.println("先手後手情報の送信時にエラーが発生しました．"); //テスト用出力
 		}
 	}
 
@@ -182,7 +182,7 @@ public class Server{
 			out[0].println(msg);//受信データをバッファに書き出す
 			out[0].flush();//受信データをそのまま返信する
 		}else{
-			System.out.println("人数がおかしいよ．"); //テスト用出力
+			System.out.println("捜査情報の転送時にエラーが発生しました．"); //テスト用出力
 		}
 
 		try{
@@ -196,7 +196,7 @@ public class Server{
 
 		}catch(IOException e){
 			System.out.println(e);
-			System.out.println("forwardMessageがおかしいよ．"); //テスト用出力
+			System.out.println("捜査情報の転送時にエラーが発生しました．"); //テスト用出力
 		}
 	}
 
@@ -210,7 +210,7 @@ public class Server{
 			out[0].println("finish");//受信データをバッファに書き出す
 			out[0].flush();//受信データをそのまま返信する
 		}else{
-			System.out.println("人数がおかしいよ．"); //テスト用出力
+			System.out.println("対戦終了判定時にエラーが発生しました．"); //テスト用出力
 		}
 
 		try {
@@ -224,7 +224,7 @@ public class Server{
 			System.exit(0);
 
 		} catch (Exception e) {
-			System.out.println("finishGameがおかしいよ．"); //テスト用出力
+			System.out.println("対戦終了判定時にエラーが発生しました．"); //テスト用出力
 		}
 
 	}
