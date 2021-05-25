@@ -817,7 +817,6 @@ public class Computer {
 
 
 
-		/*
 		//ここからテスト
 		//CPUの盤面の評価
 		System.out.println(point1[select1]);
@@ -829,7 +828,6 @@ public class Computer {
 		}
 		System.out.println("");
 		//ここまでテスト
-		*/
 
 
 
